@@ -3,6 +3,7 @@ import React from 'react'
 const Modal = ({
     children,isOpen,onClose,hideHeader
 }) => {
+    if(!isOpen) return null;
   return <div className='fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black/40'>
     <div className={'relative flex felx-col bg-white shadow-lg rounded-lg overflow-hidden'}>
         {!hideHeader &&(
@@ -16,20 +17,20 @@ const Modal = ({
         onClick={onClose}
         >
             <svg
-            className='w-3 h-3'
-            aria-hidden="true"
-            xmlns='http://www.w3.org/2000/svg'
-            fill="none"
-            viewBox='0 0 14 14'
-            >
-                <path
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth="2"
-                d='M1 116 6m0 0l6 6M7 7l6-6M7 7l-6 6'
-                />
-                </svg>            
+  className="w-3 h-3"
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  viewBox="0 0 14 14"
+>
+  <path
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    d="M2 2L12 12M12 2L2 12"
+  />
+</svg>
         </button>
         <div className='flex-1 overflow-y-auto custom-scrollbar'>
             {children}
