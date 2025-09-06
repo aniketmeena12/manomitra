@@ -6,6 +6,8 @@ import { features } from '../utilis/data'
 import Login from './auth/login'
 import SignUp from './auth/signup'
 import Modal from '../components/Modal'
+import GHQForm from '../components/assestments/GhQ'
+import AssessmentBox from './useritems/assestmentbox'
 
 const Landingpage = () => {
   const navigate = useNavigate()
@@ -17,7 +19,7 @@ const Landingpage = () => {
     <>
       <div className='w-full min-h-full bg-[#FFFCEF] pb-10'>
         <div className='w-[500px] h-[500px] bg-amber-200/20 blur-[65px] absolute top-0 left-0' />
-        <div className='container mx-auto px-4 pt-6 pb-[200px] relative z-10'>
+        <div className='container mx-auto px-4 pt-6  relative z-10'>
           <header className='flex justify-between items-center mb-16'>
             <div className='text-xl text-black font-bold'>
               ManoMitra
@@ -62,18 +64,25 @@ const Landingpage = () => {
         </div>
       </div>
 
-      <div className='w-full min-h-full relative z-10'>
-        <div>
-          <section className='flex items-center justify-center -mt-36'>
-            <GamifyCard className='w-[80vw] rounded-lg' />
-          </section>
-        </div>
+      <div className="w-full min-h-screen relative z-10 flex items-center justify-center ">
+  <div className="grid grid-cols-1 md:grid-cols-2  w-full max-w-7xl">
+    
+    <section className="flex items-center justify-center">
+      <GamifyCard className="w-[80%] rounded-lg shadow-lg" />
+    </section>
+    <section className="flex items-center justify-center">
+      <div className="w-full bg-[#FFFCEF] rounded-lg shadow-lg p-6">
+        <AssessmentBox/>
       </div>
+    </section>
 
-      <div className='w-full min-h-full bg-[#FFFCEF] mt-10'>
-        <div className='container mx-auto px-4 pt-10 pb-20'>
-          <section className='mt-5'>
-            <h2 className='text-2xl font-medium  text-center mb-12'>
+  </div>
+</div>
+
+      <div className='w-full min-h-full bg-[#FFFCEF] mt-2'>
+        <div className='container mx-auto px-4 pt-4 pb-8'>
+          <section className='mt-2'>
+            <h2 className='text-2xl font-medium text-center mb-8'>
               Features That makes smile in your face
             </h2>
             <div className='flex flex-col items-center gap-8'>
