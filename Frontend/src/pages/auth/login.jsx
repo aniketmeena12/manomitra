@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Input from '../../components/inputs/input';
+import Input from '../../components/Inputs/Input';
+
 
 
 const Login = ({ setCurrentPage }) => {
