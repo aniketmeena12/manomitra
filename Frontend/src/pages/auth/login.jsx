@@ -19,30 +19,32 @@ const Login = ({ setCurrentPage }) => {
   // handle
   const handleLogin = async (e) => {
     e.preventDefault();
-    if(!validateEmail(email)){
+    if (!validateEmail(email)) {
       setError("Please enter a valid email address.");
       return;
     }
-    if(!password){
+    if (!password) {
       setError("Please enter Password");
       return;
     }
     setError("");
-    try{
-      const response= await axiosInstance.post(API_PATHS.AUTH.LOGIN,{
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
         email,
         password,
       });
-      const{ token} = response.data;
-      if(token){
-        localStorage.setItem("token",token);
-        updateUser(response.data)
+      const { token, name, email: userEmail, profileImageUrl, id } = response.data;
+      if (token) {
+        localStorage.setItem("token", token);
+        updateUser({ name, email: userEmail, profileImageUrl, id });
         navigate("/dashboard");
+      } else {
+        setError("Login failed. Please try again.");
       }
-    }catch(error){
-      if(error.response && error.response.data.message){
+    } catch (error) {
+      if (error.response && error.response.data.message) {
         setError(error.response.data.message);
-      }else{
+      } else {
         setError("Something went wrong. Please try again.");
       }
     }
