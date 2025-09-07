@@ -4,10 +4,12 @@ import Landingpage from './pages/landingpage';
 import Login from './pages/auth/login';
 import SignUp from './pages/auth/signup';
 import Dashboard from './pages/home/dashboard';
+import UserProvider from './context/usercontext';
 
 function App() {
   
   return (
+    <UserProvider>
     <div >
     <Router>
       <Routes>
@@ -17,7 +19,16 @@ function App() {
           <Route path='/dashboard' element={<Dashboard/>}/>
       </Routes>
     </Router>
+    <Toaster
+    toastOptions={{
+      className:"",
+      style:{
+        fontSize:"13px",
+      },
+    }}
+    />
     </div>
+    </UserProvider>
   )
 }
 

@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import ProfilePhotoSelector from '../../components/ProfilePhotoSelector';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
+import { UserContext } from '../../context/usercontext';
+import { API_PATHS } from '../../utilis/apipaths';
+import axiosInstance from '../../utilis/axiosinstance';
+import uploadImage from '../../utilis/uploadimage';
+import { validateEmail } from '../../../utilits/helper';
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -10,6 +15,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
+  const {updateUser} = useContext(UserContext);
   const navigate = useNavigate();
 
   // Handle Signup Form Submit
@@ -34,14 +40,22 @@ const SignUp = () => {
 
 // SignUp API Call
     try {
-      const response = await axios.post("/api/signup", {
-        fullName,
+      if(profilePic){
+        const imgUploadRes = await uploadImage(profilePic);
+        profileImageUrl = imgUploadRes.imageURL || "";
+      }
+      const response = await axiosInstance.post( API_PATHS.AUTH.REGISTER, {
+        name:fullName,
         email,
         password,
-        profileImageUrl, // assuming this is handled elsewhere
+        profileImageUrl,
       });
-
-      // Handle success (e.g., show success message, redirect, etc.)
+      const {token} = response.data;
+      if(token){
+        localStorage.setItem("token",token);
+        updateUser(response.data);
+        navigate("/dashboard");
+      }
       console.log("Signup successful:", response.data);
     } catch (error) {
       if (error.response && error.response.data.message) {

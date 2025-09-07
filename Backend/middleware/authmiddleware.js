@@ -1,5 +1,6 @@
+
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/userModel")
 // ensure this path matches your project structure
 
 

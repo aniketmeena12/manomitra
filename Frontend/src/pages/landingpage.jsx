@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LuSparkles } from 'react-icons/lu'
 import GamifyCard from './smallgame/gamifycard'
@@ -8,12 +8,21 @@ import SignUp from './auth/signup'
 import Modal from '../components/Modal'
 import GHQForm from '../components/assestments/GhQ'
 import AssessmentBox from './useritems/assestmentbox'
+import { UserContext } from '../context/usercontext'
+import ProfileInfoCard from '../components/cards/ProfileinfoCard'
 
 const Landingpage = () => {
+  const {user}= useContext(UserContext);
   const navigate = useNavigate()
   const [openAuthModal, setOpenAuthModal] = useState(false)
   const [currentPage, setCurrentPage] = useState("login")
-  const handleCTA = () => {}
+  const handleCTA = () => {
+    if(!user){
+      setOpenAuthModal(true);
+    }else{
+      navigate("/dashboard");
+    }
+  }
 
   return (
     <>
@@ -24,12 +33,12 @@ const Landingpage = () => {
             <div className='text-xl text-black font-bold'>
               ManoMitra
             </div>
-            <button
-              className='bg-gradient-to-r from-[#ff9324] to-[#e99a4b] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-black hover:text-white border border-white transition-colors cursor-pointer'
-              onClick={() => setOpenAuthModal(true)}
-            >
-              Login/Sign Up
-            </button>
+          {user ? (<ProfileInfoCard/>):(<button
+            className='bg-gradient-to-r from-[#ff9324] to-[#e99a4b] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-black hover:text-white border border-white transition-colors cursor-pointer'
+            onClick={() => setOpenAuthModal(true)}
+          >
+            Login/Sign Up
+          </button>)}
           </header>
           <div className='flex flex-col md:flex-row items-center md:gap-x-32'>
             <div className='w-full md:w-1/2 pr-4 mb-8 md:mb-0'>
