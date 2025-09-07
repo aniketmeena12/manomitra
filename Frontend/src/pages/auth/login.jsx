@@ -1,24 +1,23 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Input from '../../components/Inputs/Input';
-import { validateEmail } from '../../../utilits/helper';
-import axiosInstance from '../../utilis/axiosinstance';
-import { API_PATHS } from '../../utilis/apipaths';
-import { UserContext } from '../../context/usercontext';
-
-
+// src/pages/Auth/Login.js
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Inputs/Input";
+import axiosInstance from "../../utilis/axiosinstance";
+import { API_PATHS } from "../../utilis/apipaths";
+import { UserContext } from "../../context/usercontext";
+import { validateEmail } from "../../utilis/helper";
 
 const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const {updateUser} = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // handle
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (!validateEmail(email)) {
       setError("Please enter a valid email address.");
       return;
@@ -27,16 +26,22 @@ const Login = ({ setCurrentPage }) => {
       setError("Please enter Password");
       return;
     }
+
     setError("");
     try {
       const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
         email,
         password,
       });
-      const { token, name, email: userEmail, profileImageUrl, id } = response.data;
+
+      const { token, name, email: userEmail, profileImageUrl, id } =
+        response.data;
+
       if (token) {
-        localStorage.setItem("token", token);
-        updateUser({ name, email: userEmail, profileImageUrl, id });
+        // ✅ pass the token into updateUser
+        updateUser({ token, name, email: userEmail, profileImageUrl, id });
+
+        // Redirect
         navigate("/dashboard");
       } else {
         setError("Login failed. Please try again.");
@@ -53,7 +58,10 @@ const Login = ({ setCurrentPage }) => {
   return (
     <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
       <h3 className="text-lg font-semibold text-black">Welcome Back</h3>
-      <p className="text-xs text-slate-700 mt-[5px] mb-6">please enter your details to login</p>
+      <p className="text-xs text-slate-700 mt-[5px] mb-6">
+        please enter your details to login
+      </p>
+
       <form onSubmit={handleLogin}>
         <Input
           value={email}
@@ -78,13 +86,11 @@ const Login = ({ setCurrentPage }) => {
         </button>
 
         <p className="text-[13px] text-slate-800 mt-3">
-          don't have an account?{" "}
+          don&apos;t have an account?{" "}
           <button
             className="font-medium text-primary underline cursor-pointer"
             type="button"
-            onClick={() => {
-              setCurrentPage("signup");
-            }}
+            onClick={() => setCurrentPage("signup")}
           >
             SignUp
           </button>

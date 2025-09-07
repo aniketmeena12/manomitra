@@ -6,7 +6,7 @@ import { UserContext } from '../../context/usercontext';
 import { API_PATHS } from '../../utilis/apipaths';
 import axiosInstance from '../../utilis/axiosinstance';
 import uploadImage from '../../utilis/uploadimage';
-import { validateEmail } from '../../../utilits/helper';
+import { validateEmail } from '../../utilis/helper';
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -64,9 +64,6 @@ const SignUp = () => {
         setError("Something went wrong. Please try again.");
       }
     }
-
-
-
   };
 
   return (
@@ -127,4 +124,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
