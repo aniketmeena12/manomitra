@@ -11,6 +11,7 @@ const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // ✅ new loading state
 
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -28,31 +29,37 @@ const Login = ({ setCurrentPage }) => {
     }
 
     setError("");
+
     try {
       const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
         email,
         password,
       });
 
-      const { token, name, email: userEmail, profileImageUrl, id } =
+      // ✅ use _id from backend
+      const { token, name, email: userEmail, profileImageUrl, _id } =
         response.data;
 
       if (token) {
-        // ✅ pass the token into updateUser
-        updateUser({ token, name, email: userEmail, profileImageUrl, id });
+        updateUser({
+          token,
+          name,
+          email: userEmail,
+          profileImageUrl,
+          id: _id, // ✅ mapped correctly
+        });
 
-        // Redirect
-        navigate("/dashboard");
+        navigate("/dashboard"); // redirect
       } else {
         setError("Login failed. Please try again.");
       }
     } catch (error) {
-      if (error.response && error.response.data.message) {
+      if (error.response&& error.response.data.message) {
         setError(error.response.data.message);
-      } else {
-        setError("Something went wrong. Please try again.");
+      }else{
+        setError("Something went wrong. Please try agian")
       }
-    }
+    } 
   };
 
   return (
@@ -81,8 +88,12 @@ const Login = ({ setCurrentPage }) => {
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-        <button type="submit" className="btn-primary">
-          LOGIN
+        <button
+          type="submit"
+          className="btn-primary"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "LOGIN"}
         </button>
 
         <p className="text-[13px] text-slate-800 mt-3">

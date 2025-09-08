@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 
 const DashboardMoodGraph = () => {
@@ -14,9 +20,12 @@ const DashboardMoodGraph = () => {
 
   const fetchMoods = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/mood");
-      console.log("Mood API data:", res.data); // 👀 debug log
-      setMoodData(res.data);
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:8000/api/mood", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("Mood API data:", res.data);
+      setMoodData(res.data); // ✅ backend returns week array
     } catch (err) {
       console.error("Error fetching moods:", err.response?.data || err.message);
     } finally {
@@ -24,9 +33,7 @@ const DashboardMoodGraph = () => {
     }
   };
 
-  // Check if all moods are 0 or no data
-  const hasData =
-    moodData.length > 0 && moodData.some((entry) => entry.mood > 0);
+  const hasData = moodData.some((entry) => entry.mood > 0);
 
   return (
     <div className="bg-white shadow rounded-lg p-4">
@@ -41,7 +48,7 @@ const DashboardMoodGraph = () => {
           <LineChart data={moodData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" fontSize={10} />
-            <YAxis domain={[0, 10]} />
+            <YAxis domain={[0, 5]} />
             <Tooltip />
             <Line
               type="monotone"

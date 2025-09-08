@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import ProfileInfoCard from "../components/cards/ProfileinfoCard";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -27,7 +28,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              to="/resource-hub"
+              to="/resourcehub"
               className={({ isActive }) =>
                 isActive ? "text-amber-600 font-semibold" : "hover:text-amber-600"
               }
@@ -37,7 +38,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              to="/counselingsessions"
+              to="/Counselingsessons"
               className={({ isActive }) =>
                 isActive ? "text-amber-600 font-semibold" : "hover:text-amber-600"
               }
@@ -47,7 +48,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              to="/community"
+              to="/Community"
               className={({ isActive }) =>
                 isActive ? "text-amber-600 font-semibold" : "hover:text-amber-600"
               }
@@ -68,11 +69,10 @@ const Navbar = () => {
         </ul>
 
         {/* Profile Section */}
-        <div className="hidden md:flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-gray-300"></div>
-          <div className="text-sm font-semibold">aniket</div>
-          <button className="text-orange-600 text-sm font-medium">Logout</button>
-        </div>
+       <div className="hidden md:flex items-center gap-3">
+  <ProfileInfoCard />
+</div>
+
 
         {/* Hamburger (Mobile) */}
         <button
@@ -114,7 +114,7 @@ const Navbar = () => {
 
         <nav className="flex flex-col mt-16 gap-6 px-8 text-gray-700 font-medium">
           <NavLink
-            to="/resource-hub"
+            to="/resourcehub"
             className={({ isActive }) =>
               isActive ? "text-amber-600 font-semibold" : ""
             }
@@ -132,7 +132,7 @@ const Navbar = () => {
             Appointment Booking
           </NavLink>
           <NavLink
-            to="/community"
+            to="/Community"
             className={({ isActive }) =>
               isActive ? "text-amber-600 font-semibold" : ""
             }
@@ -153,10 +153,8 @@ const Navbar = () => {
 
         {/* Mobile Profile */}
         <div className="px-8 mt-8 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-gray-300"></div>
-          <div className="text-sm font-semibold">aniket</div>
-          <button className="text-orange-600 text-sm font-medium">Logout</button>
-        </div>
+  <ProfileInfoCard />
+</div>
       </div>
 
       {/* Overlay */}

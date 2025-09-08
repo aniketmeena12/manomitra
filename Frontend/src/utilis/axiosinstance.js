@@ -19,19 +19,21 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 // Handle responses
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
         // Token missing/invalid/expired → logout
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        window.location.href = "/login";
+        window.location.href="/";
       } else if (error.response.status === 500) {
         console.error("Server error. Please try again later.");
       }

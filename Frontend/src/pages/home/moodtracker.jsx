@@ -13,7 +13,10 @@ const MoodTrackerPage = () => {
 
   const fetchMoods = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/mood");
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:8000/api/mood", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setMoodData(res.data);
     } catch (err) {
       console.error("Error fetching moods:", err.response?.data || err.message);
@@ -21,10 +24,11 @@ const MoodTrackerPage = () => {
   };
 
   const moods = [
-    { label: "😢 Sad", value: 1 },
-    { label: "😐 Okay", value: 3 },
-    { label: "😊 Happy", value: 5 },
-    { label: "🤩 Excited", value: 7 },
+    {label:"😣 Very Sad" , value : 2},
+    { label: "😢 Sad", value: 4 },
+    { label: "😐 Okay", value: 6 },
+    { label: "😊 Happy", value: 8 },
+    { label: "🤩 Excited", value: 10 },
   ];
 
   const logMood = async (value) => {
@@ -32,7 +36,12 @@ const MoodTrackerPage = () => {
     const day = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][today.getDay()];
 
     try {
-      await axios.post("http://localhost:8000/api/mood", { day, mood: value });
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "http://localhost:8000/api/mood",
+        { day, mood: value },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       fetchMoods();
     } catch (err) {
       console.error("Error logging mood:", err.response?.data || err.message);

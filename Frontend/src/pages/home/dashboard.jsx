@@ -18,15 +18,18 @@ const Dashboard = () => {
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  // Fetch mood logs from backend when page loads
+  // Fetch moods on mount
   useEffect(() => {
     fetchMoods();
   }, []);
 
   const fetchMoods = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/mood");
-      setMoodData(res.data);
+      const res = await axios.get("http://localhost:8000/api/mood", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      console.log("Mood API Response:", res.data);
+      setMoodData(res.data); // ✅ backend already gives array
     } catch (err) {
       console.error("Error fetching mood:", err.response?.data || err.message);
     } finally {
@@ -34,15 +37,16 @@ const Dashboard = () => {
     }
   };
 
-  // Update today’s mood
   const handleMoodUpdate = async (value) => {
     const today = days[new Date().getDay()];
     try {
-      const res = await axios.post("http://localhost:8000/api/mood", {
-        day: today,
-        mood: value,
-      });
-      setMoodData(res.data); // update chart instantly
+      const res = await axios.post(
+        "http://localhost:8000/api/mood",
+        { day: today, mood: value },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+      console.log("Mood POST Response:", res.data);
+      setMoodData(res.data); // ✅ backend returns updated week
     } catch (err) {
       console.error("Error updating mood:", err.response?.data || err.message);
     }
