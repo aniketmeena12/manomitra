@@ -67,7 +67,7 @@ export function PositiveAffirmations() {
         <Button
           onClick={getNewAffirmation}
           size="lg"
-          className="bg-purple-500 hover:bg-purple-600"
+          className="bg-purple-500 hover:bg-purple-600 cursor-pointer"
         >
           <RefreshCw className="w-5 h-5 mr-2" />
           New Affirmation

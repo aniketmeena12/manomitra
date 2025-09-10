@@ -96,8 +96,8 @@ export function BreathingExercise() {
           <Button
             onClick={toggleExercise}
             size="lg"
-            className="flex items-center gap-2 text-white"
-            style={{ backgroundColor: '#7B9ACC' }}
+            className="flex items-center gap-2 text-white bg-[#7B9ACC] hover:bg-[#abc3e9] cursor-pointer"
+           
           >
             {isActive ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
             {isActive ? 'Pause' : 'Start'}
@@ -107,7 +107,7 @@ export function BreathingExercise() {
             onClick={resetExercise}
             variant="outline"
             size="lg"
-            className="flex items-center gap-2 border"
+            className="flex items-center gap-2 border cursor-pointer"
             style={{ borderColor: '#4A4A4A', color: '#4A4A4A' }}
           >
             <RotateCcw className="w-5 h-5" />

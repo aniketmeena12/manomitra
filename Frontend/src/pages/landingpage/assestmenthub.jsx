@@ -194,8 +194,7 @@ function AssessmentHub({ onStartAssessment }) {
                 </div>
                 <Button
                   onClick={() => onStartAssessment(assessment.id)}
-                  className="w-full text-white"
-                  style={{ backgroundColor: '#7B9ACC' }}
+                  className="w-full text-white bg-[#7B9ACC] hover:bg-[#b8d2fa] cursor-pointer"
                 >
                   Start Assessment
                 </Button>

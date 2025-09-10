@@ -104,8 +104,8 @@ const SignUp = ({setCurrentPage}) => {
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-        <Button type="submit"  className="text-white bg- hover:bg-[#b9cded] cursor-pointer"
-          style={{ backgroundColor: '#7B9ACC' }}>
+        <Button type="submit"  className="w-full text-white bg-[#7B9ACC] hover:bg-[#b7cef4] cursor-pointer"
+         >
           SIGN UP
         </Button>
 

@@ -91,8 +91,7 @@ const Login = ({ setCurrentPage }) => {
 
         <Button
           type="submit"
-          className="text-white  cursor-pointer"
-          style={{ backgroundColor: '#7B9ACC' }}
+           className="w-full text-white bg-[#7B9ACC] hover:bg-[#b7cef4] cursor-pointer"
           disabled={loading}
         >
           {loading ? "Logging in..." : "LOGIN"}
