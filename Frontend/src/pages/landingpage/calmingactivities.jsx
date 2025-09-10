@@ -63,7 +63,7 @@ export function CalmingActivities() {
                   </p>
                   <Button
                     onClick={() => handleActivityClick(activity.title)}
-                    className="w-full bg-teal-500 hover:bg-teal-600"
+                    className="w-full bg-teal-500 hover:bg-teal-600 cursor-pointer"
                   >
                     {activity.action}
                   </Button>

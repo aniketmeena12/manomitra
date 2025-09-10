@@ -55,8 +55,8 @@ export function Header() {
             <Button 
               size="sm"
               onClick={() => scrollToSection('resources')}
-              className="text-white cursor-pointer"
-              style={{ backgroundColor: '#7B9ACC' }}
+              className="text-white cursor-pointer bg-[#7B9ACC] hover:bg-[#a5c2f0]"
+              
             >
               Get Help
             </Button>
