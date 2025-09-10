@@ -21,7 +21,7 @@ const activities = [
   },
   {
     title: 'Guided Journaling',
-    description: 'Write your thoughts with gentle prompts',
+    description: 'Share your thoughts with gentle support to other people\'s',
     icon: PenTool,
     color: 'from-orange-400 to-red-400',
     action: 'Start Writing'

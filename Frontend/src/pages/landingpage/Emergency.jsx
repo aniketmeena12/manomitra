@@ -98,7 +98,7 @@ export function EmergencyResources() {
             Important Reminder
           </h3>
           <p className="text-yellow-700">
-            If you are experiencing a mental health emergency, please call 911 or go to your nearest emergency room immediately.
+            If you are experiencing a mental health emergency, please call 112 or go to your nearest emergency room immediately.
           </p>
         </div>
       </div>

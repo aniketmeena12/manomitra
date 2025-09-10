@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import DashboardLayout from "../../layouts/dashboardlayout";
+import React, { useState, useEffect, useContext } from "react";
+
 import {
   LineChart,
   Line,
@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Calendar, Users, BookOpen } from "lucide-react";
 import axios from "axios";
+import { UserContext } from "@/context/usercontext";
 
 const Dashboard = () => {
   const [moodData, setMoodData] = useState([]);
@@ -23,6 +24,16 @@ const Dashboard = () => {
     fetchMoods();
   }, []);
 
+   const { user} = useContext(UserContext);
+  
+    const getInitials = (name) => {
+      if (!name) return "?";
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase();
+    };
   const fetchMoods = async () => {
     try {
       const res = await axios.get("http://localhost:8000/api/mood", {
@@ -53,31 +64,34 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="bg-white min-h-screen p-6">
+    <div>
+      <div className=" min-h-screen p-6">
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold">Welcome back, Aniket 👋</h2>
+          <h2  style={{ color: "#4A4A4A" }}>
+              {user ? `Welcome back, ${user.name.split(" ")[0]} 👋` : "Welcome 👋"}
+            </h2>
           <p className="text-gray-600">
             Here’s your mental wellness snapshot for the week.
           </p>
         </div>
 
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-[rgb(255,255,255,0.6)] rounded-xl p-5 shadow-md">
+        <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Daily Wellness Quest */}
-          <div className="bg-[#FFF8E1] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(228,217,255,0.3)] shadow-md rounded-2xl p-4">
             <h3 className="font-bold text-lg mb-2">Daily Wellness Quest</h3>
             <p className="text-gray-600 mb-4">
               Complete a 2-min breathing exercise to earn points.
             </p>
-            <button className="bg-black text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
               Start Exercise
             </button>
           </div>
 
           {/* Mood Tracker */}
-          <div className="bg-[#FFF8E1] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(244,244,175,0.5)] shadow-md rounded-2xl p-4">
             <h3 className="font-bold text-lg mb-2">Mood Tracker</h3>
 
             {loading ? (
@@ -120,31 +134,31 @@ const Dashboard = () => {
           </div>
 
           {/* Self Assessment */}
-          <div className="bg-[#FFF8E1] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(224,215,215,0.5)] shadow-md rounded-2xl p-4">
             <h3 className="font-bold text-lg mb-2">Self Assessment</h3>
             <p className="text-gray-600 mb-4">
               Check your mental wellness with a quick test.
             </p>
-            <button className="bg-black text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
               Take Assessment
             </button>
           </div>
 
           {/* Next Appointment */}
-          <div className="bg-[#FFF8E1] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(231,182,204,0.4)] shadow-md rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Calendar size={18} />
               <h3 className="font-bold text-lg">Next Appointment</h3>
             </div>
             <p className="text-gray-600 mb-2">Counselor: Dr. Mehta</p>
             <p className="text-gray-800 font-semibold">Tomorrow, 5:00 PM</p>
-            <button className="bg-black text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
               Join Session
             </button>
           </div>
 
           {/* Community Hub */}
-          <div className="bg-[#FFF8E1] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(159,228,212,0.3)] shadow-md rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Users size={18} />
               <h3 className="font-bold text-lg">Community Hub</h3>
@@ -160,7 +174,7 @@ const Dashboard = () => {
           </div>
 
           {/* Resources */}
-          <div className="bg-[#FFF8E1] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(207,165,226,0.4)] shadow-md rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <BookOpen size={18} />
               <h3 className="font-bold text-lg">Resources</h3>
@@ -168,13 +182,14 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-2">
               Guided meditations, self-help articles, and videos.
             </p>
-            <button className="bg-black text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
               Explore
             </button>
           </div>
         </div>
+        </div>
       </div>
-    </DashboardLayout>
+    </div>
   );
 };
 

@@ -78,7 +78,7 @@ const Landingpage = () => {
           </p>
           <p className="text-sm" style={{ color: '#4A4A4A' }}>
             This website is for supportive purposes only and is not a substitute for professional mental
-            health care. If you are experiencing a mental health emergency, please contact 911 or your
+            health care. If you are experiencing a mental health emergency, please contact 112 or your
             local emergency services.
           </p>
         </div>

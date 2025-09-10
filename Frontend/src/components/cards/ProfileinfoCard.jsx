@@ -12,7 +12,7 @@ const ProfileInfoCard = () => {
     navigate("/");
   };
 
-  if (!user) return null; // Prevent error if user is null
+  if (!user) return null; 
 
   return (
     <div className='flex items-center '>
