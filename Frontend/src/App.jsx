@@ -1,6 +1,6 @@
 import { BrowserRouter as Router,Routes,Route, BrowserRouter } from 'react-router-dom';
-import{Toaster} from "react-hot-toast";
-import Landingpage from './pages/landingpage';
+import { Toaster } from "sonner"
+
 import Login from './pages/auth/login';
 import SignUp from './pages/auth/signup';
 import Dashboard from './pages/home/dashboard';
@@ -10,6 +10,7 @@ import Peerform from './pages/home/peerform';
 import Appointmentbook from './pages/home/counsellingbook';
 import MoodTracker from './pages/home/moodtracker';
 import Navbar from './layouts/navbar';
+import Landingpage from './pages/landingpage/landingpage';
 
 const MainLayout = ({ children }) => (
   <>

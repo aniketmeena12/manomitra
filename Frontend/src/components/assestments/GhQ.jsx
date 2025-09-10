@@ -1,97 +1,158 @@
-import React, { useState } from "react";
+import { useState } from 'react';
 
-const ghqQuestions = [
-  "Able to concentrate on whatever you're doing",
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
+import { Progress } from '../ui/progress';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
+
+const questions = [
+  "Been able to concentrate on whatever you're doing",
   "Lost much sleep over worry",
+  "Felt that you were playing a useful part in things",
+  "Felt capable of making decisions about things",
   "Felt constantly under strain",
-  "Felt you couldn’t overcome difficulties",
-  "Able to enjoy normal day-to-day activities",
-  "Felt unhappy or depressed",
-  "Felt reasonably happy, all things considered",
+  "Felt you couldn't overcome your difficulties",
+  "Been able to enjoy your normal day-to-day activities",
+  "Been able to face up to problems",
+  "Been feeling unhappy or depressed",
+  "Been losing confidence in yourself",
+  "Been thinking of yourself as a worthless person",
+  "Been feeling reasonably happy, all things considered"
 ];
 
-const ghqOptions = [
-  { value: 0, label: "Not at all" },
-  { value: 1, label: "Sometimes" },
-  { value: 2, label: "Often" },
-  { value: 3, label: "Almost always" },
-];
+const positiveQuestions = [0, 2, 3, 6, 7, 11]; // Questions where positive responses are healthy
 
-const GHQForm = () => {
-  const [answers, setAnswers] = useState(Array(ghqQuestions.length).fill(null));
-  const [result, setResult] = useState(null);
+const getOptions = (questionIndex) => {
+  const isPositive = positiveQuestions.includes(questionIndex);
+  
+  if (isPositive) {
+    return [
+      { value: '0', label: 'Better than usual' },
+      { value: '1', label: 'Same as usual' },
+      { value: '2', label: 'Less than usual' },
+      { value: '3', label: 'Much less than usual' }
+    ];
+  } else {
+    return [
+      { value: '0', label: 'Not at all' },
+      { value: '1', label: 'No more than usual' },
+      { value: '2', label: 'Rather more than usual' },
+      { value: '3', label: 'Much more than usual' }
+    ];
+  }
+};
 
-  const handleChange = (index, value) => {
+export function GHQAssessment({ onComplete, onBack }) {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState(new Array(questions.length).fill(''));
+
+  const handleAnswer = (value) => {
     const newAnswers = [...answers];
-    newAnswers[index] = value;
+    newAnswers[currentQuestion] = value;
     setAnswers(newAnswers);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Binary GHQ scoring (0-0-1-1)
-    const binaryScores = answers.map((ans) => (ans >= 2 ? 1 : 0));
-    const totalScore = binaryScores.reduce((acc, curr) => acc + curr, 0);
-
-    let judgment = "";
-    if (totalScore <= 2) {
-      judgment = "✅ Normal range – low risk of distress.";
-    } else if (totalScore <= 4) {
-      judgment = "⚠️ Moderate distress – monitor and seek support if needed.";
-    } else {
-      judgment = "❗ High distress – consider professional help.";
+  const handleNext = () => {
+    if (!answers[currentQuestion]) {
+      toast.error('Please select an answer before continuing');
+      return;
     }
-
-    setResult({ totalScore, judgment });
+    
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      // Calculate GHQ score - count answers of 2 or 3 (indicating distress)
+      const totalScore = answers.reduce((sum, answer) => {
+        const score = parseInt(answer);
+        return sum + (score >= 2 ? 1 : 0);
+      }, 0);
+      onComplete(totalScore);
+    }
   };
 
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const options = getOptions(currentQuestion);
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="p-6 bg-white rounded-2xl shadow-md space-y-6"
-    >
-      <h2 className="text-xl font-bold text-gray-800 mb-4">GHQ Questionnaire</h2>
-
-      {ghqQuestions.map((q, i) => (
-        <div key={i} className="mb-4">
-          <p className="font-medium text-gray-700 mb-2">
-            {i + 1}. {q}
-          </p>
-          <div className="flex flex-wrap gap-4">
-            {ghqOptions.map((opt) => (
-              <label key={opt.value} className="flex items-center">
-                <input
-                  type="radio"
-                  name={`ghq-${i}`}
-                  value={opt.value}
-                  checked={answers[i] === opt.value}
-                  onChange={() => handleChange(i, opt.value)}
-                  className="mr-2 cursor-pointer"
-                />
-                {opt.label}
-              </label>
-            ))}
+    <section className="py-20" style={{ backgroundColor: '#F2F2F2' }}>
+      <div className="max-w-4xl mx-auto px-6">
+        <Card className="p-8 border" style={{ backgroundColor: 'white', borderColor: '#A8D0E6' }}>
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <Button
+                variant="outline"
+                onClick={onBack}
+                className="border"
+                style={{ borderColor: '#A8D0E6', color: '#4A4A4A' }}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <span className="text-sm" style={{ color: '#4A4A4A' }}>
+                Question {currentQuestion + 1} of {questions.length}
+              </span>
+            </div>
+            <Progress value={progress} className="h-2 mb-6" />
+            <h2 className="mb-4" style={{ color: '#4A4A4A' }}>
+              GHQ-12 General Health Questionnaire
+            </h2>
+            <p className="text-sm mb-6" style={{ color: '#4A4A4A' }}>
+              We would like to know how your health has been in general over the past few weeks. Have you recently...
+            </p>
           </div>
-        </div>
-      ))}
 
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer"
-      >
-        Submit
-      </button>
+          <div className="mb-8">
+            <h3 className="mb-6 text-lg" style={{ color: '#4A4A4A' }}>
+              {questions[currentQuestion]}
+            </h3>
+            
+            <RadioGroup
+              value={answers[currentQuestion]}
+              onValueChange={handleAnswer}
+              className="space-y-4"
+            >
+              {options.map((option) => (
+                <div key={option.value} className="flex items-center space-x-2">
+                  <RadioGroupItem value={option.value} id={option.value} />
+                  <Label htmlFor={option.value} className="cursor-pointer">
+                    {option.label}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </div>
 
-      {result && (
-        <div className="mt-6 p-4 border rounded-lg bg-gray-50">
-          <h3 className="text-lg font-semibold">Your Result</h3>
-          <p className="mt-2">Score: {result.totalScore} / 7</p>
-          <p className="mt-1">{result.judgment}</p>
-        </div>
-      )}
-    </form>
+          <div className="flex justify-between">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentQuestion === 0}
+              className="border"
+              style={{ borderColor: '#A8D0E6', color: '#4A4A4A' }}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              className="text-white"
+              style={{ backgroundColor: '#7B9ACC' }}
+            >
+              {currentQuestion === questions.length - 1 ? 'Complete Assessment' : 'Next'}
+              {currentQuestion < questions.length - 1 && <ArrowRight className="w-4 h-4 ml-2" />}
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </section>
   );
-};
-
-export default GHQForm;
+}

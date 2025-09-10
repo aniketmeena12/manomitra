@@ -6,6 +6,7 @@ import axiosInstance from "../../utilis/axiosinstance";
 import { API_PATHS } from "../../utilis/apipaths";
 import { UserContext } from "../../context/usercontext";
 import { validateEmail } from "../../utilis/helper";
+import { Button } from "@/components/ui/button";
 
 const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
@@ -88,13 +89,14 @@ const Login = ({ setCurrentPage }) => {
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-        <button
+        <Button
           type="submit"
-          className="btn-primary"
+          className="text-white  cursor-pointer"
+          style={{ backgroundColor: '#7B9ACC' }}
           disabled={loading}
         >
           {loading ? "Logging in..." : "LOGIN"}
-        </button>
+        </Button>
 
         <p className="text-[13px] text-slate-800 mt-3">
           don&apos;t have an account?{" "}

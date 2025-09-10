@@ -7,8 +7,9 @@ import { API_PATHS } from '../../utilis/apipaths';
 import axiosInstance from '../../utilis/axiosinstance';
 import uploadImage from '../../utilis/uploadimage';
 import { validateEmail } from '../../utilis/helper';
+import { Button } from '@/components/ui/button';
 
-const SignUp = () => {
+const SignUp = ({setCurrentPage}) => {
   const [profilePic, setProfilePic] = useState(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -103,9 +104,10 @@ const SignUp = () => {
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-        <button type="submit" className="btn-primary">
+        <Button type="submit"  className="text-white bg- hover:bg-[#b9cded] cursor-pointer"
+          style={{ backgroundColor: '#7B9ACC' }}>
           SIGN UP
-        </button>
+        </Button>
 
         <p className="text-[13px] text-slate-800 mt-3">
           Already an account?{" "}

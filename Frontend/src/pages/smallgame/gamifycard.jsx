@@ -1,105 +1,140 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from 'react';
 
-/**
- * GamifyCard with Breathing Modal
- */
-export default function GamifyCard({
-  id = "gamify-1",
-  title = "Daily Wellness Quest",
-  desc = "Complete a short breathing exercise to earn points.",
-  goal = 10,
-  initialPoints = 0,
-}) {
-  const storageKey = `manomitra:${id}:points`;
-  const [points, setPoints] = useState(() => {
-    const saved = localStorage.getItem(storageKey);
-    return saved ? Number(saved) : initialPoints;
-  });
-  const [completed, setCompleted] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const progress = Math.min(100, Math.round((points / goal) * 100));
+import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export function BreathingExercise() {
+  const [isActive, setIsActive] = useState(false);
+  const [phase, setPhase] = useState('inhale');
+  const [timer, setTimer] = useState(0);
+  const [scale, setScale] = useState(1);
+
+  const phases = {
+    inhale: { duration: 4, next: 'hold' },
+    hold: { duration: 4, next: 'exhale' },
+    exhale: { duration: 6, next: 'inhale' }
+  };
 
   useEffect(() => {
-    localStorage.setItem(storageKey, String(points));
-    setCompleted(points >= goal);
-  }, [points, storageKey, goal]);
+    let interval = null;
+    
+    if (isActive) {
+      interval = setInterval(() => {
+        setTimer(prev => {
+          const currentPhase = phases[phase];
+          
+          if (prev >= currentPhase.duration) {
+            setPhase(currentPhase.next);
+            return 0;
+          }
+          
+          // Update scale based on phase
+          if (phase === 'inhale') {
+            setScale(1 + (prev / currentPhase.duration) * 0.3);
+          } else if (phase === 'exhale') {
+            setScale(1.3 - (prev / currentPhase.duration) * 0.5);
+          }
+          
+          return prev + 0.1;
+        });
+      }, 100);
+    }
 
-  const earnPoints = (n = 2) => {
-    setPoints((p) => Math.min(goal, p + n));
+    return () => clearInterval(interval);
+  }, [isActive, phase]);
+
+  const toggleExercise = () => {
+    setIsActive(!isActive);
   };
 
-  const startBreathing = () => {
-    setShowModal(true);
-    setTimeout(() => {
-      earnPoints(3);
-      setShowModal(false);
-    }, 8000);
-  };
-
-  const handleReset = () => {
-    setPoints(0);
+  const resetExercise = () => {
+    setIsActive(false);
+    setPhase('inhale');
+    setTimer(0);
+    setScale(1);
   };
 
   return (
-    <>
-      {/* Main Gamify Card */}
-      <div className="bg-[#FFFCEF] rounded-2xl shadow-lg p-8 w-full max-w-md mx-auto">
-        <h2 className="text-xl font-bold text-black mb-2">{title}</h2>
-        <p className="text-gray-700 mb-4">{desc}</p>
-        <div className="mb-4">
-          <span className="bg-gradient-to-r from-[#ff9324] to-[#e99a4b] text-white text-xs font-semibold px-3 py-1 rounded-full">
-            {points} pts
-          </span>
-          {/* Progress Bar */}
-          <div className="w-full h-3 bg-amber-100 rounded-full mt-3">
-            <div
-              className="h-3 rounded-full bg-gradient-to-r from-[#ff9324] to-[#e99a4b] transition-all"
-              style={{ width: `${progress}%` }}
+    <section id="breathing" className="py-20" style={{ backgroundColor: '#A8D0E6' }}>
+      <div className="max-w-4xl mx-auto px-6 text-center">
+        <h2 className="mb-8 text-4xl" style={{ color: '#4A4A4A' }}>
+          Guided Breathing
+        </h2>
+        <p className="mb-12 text-lg max-w-2xl mx-auto" style={{ color: '#4A4A4A' }}>
+          Follow the visual guide below. Breathe in as the circle grows, hold when it pauses, and breathe out as it shrinks.
+        </p>
+        
+        <div className="mb-12">
+          <div className="relative w-80 h-80 mx-auto flex items-center justify-center">
+            {/* Breathing circle */}
+            <div 
+              className="w-48 h-48 rounded-full flex items-center justify-center transition-transform duration-100 ease-in-out shadow-lg"
+              style={{ 
+                transform: `scale(${scale})`,
+                background: 'linear-gradient(to bottom right, #7B9ACC, #E4D9FF)'
+              }}
+            >
+              <div className="text-center">
+                <div className="text-2xl mb-2 capitalize" style={{ color: 'white' }}>
+                  {phase}
+                </div>
+                <div className="text-sm" style={{ color: 'white' }}>
+                  {Math.ceil(phases[phase].duration - timer)}s
+                </div>
+              </div>
+            </div>
+            
+            {/* Outer ring for visual guidance */}
+            <div 
+              className="absolute w-72 h-72 rounded-full border-2 opacity-30"
+              style={{ borderColor: '#4A4A4A' }}
             ></div>
           </div>
         </div>
-        <div className="mb-4 text-gray-600">
-          Goal: <span className="font-semibold">{goal} points</span>
-        </div>
-        <div className="mt-6 flex items-center justify-between gap-3">
-          {!completed ? (
-            <button
-              onClick={startBreathing}
-              className="flex-1 bg-gradient-to-r from-[#ff9324] to-[#e99a4b] hover:bg-black text-white font-semibold px-7 py-2.5 rounded-full transition-colors cursor-pointer"
-            >
-              Start Task
-            </button>
-          ) : (
-            <div className="flex-1 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 font-medium">
-              🎉 Completed!
-            </div>
-          )}
-          <button
-            onClick={handleReset}
-            className="text-[#ff9324] text-sm font-medium mt-2 ml-2 hover:underline cursor-pointer"
+        
+        <div className="flex justify-center gap-4 mb-8">
+          <Button
+            onClick={toggleExercise}
+            size="lg"
+            className="flex items-center gap-2 text-white"
+            style={{ backgroundColor: '#7B9ACC' }}
           >
+            {isActive ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+            {isActive ? 'Pause' : 'Start'}
+          </Button>
+          
+          <Button
+            onClick={resetExercise}
+            variant="outline"
+            size="lg"
+            className="flex items-center gap-2 border"
+            style={{ borderColor: '#4A4A4A', color: '#4A4A4A' }}
+          >
+            <RotateCcw className="w-5 h-5" />
             Reset
-          </button>
+          </Button>
         </div>
-      </div>
-
-      {/* Breathing Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-[#FFFCEF] rounded-2xl border border-amber-200 p-8 shadow-xl max-w-sm w-full text-center">
-            <h2 className="text-xl font-semibold text-black mb-4">
-              Breathe with me 🌬️
-            </h2>
-            <p className="text-amber-700 mb-6">
-              Inhale as the circle grows, exhale as it shrinks.
-            </p>
-            <div className="flex justify-center mb-6">
-              <div className="animate-breathe w-24 h-24 rounded-full bg-gradient-to-r from-[#ff9324] to-[#e99a4b]"></div>
+        
+        <div className="max-w-2xl mx-auto">
+          <h3 className="mb-4" style={{ color: '#4A4A4A' }}>
+            How to Practice
+          </h3>
+          <div className="grid md:grid-cols-3 gap-4 text-sm">
+            <div className="bg-white/80 backdrop-blur p-4 rounded-lg">
+              <div className="mb-2" style={{ color: '#7B9ACC' }}>Inhale (4s)</div>
+              <p style={{ color: '#4A4A4A' }}>Breathe in slowly through your nose</p>
             </div>
-            <p className="text-sm text-amber-500 italic">One cycle = 8 seconds</p>
+            <div className="bg-white/80 backdrop-blur p-4 rounded-lg">
+              <div className="mb-2" style={{ color: '#7B9ACC' }}>Hold (4s)</div>
+              <p style={{ color: '#4A4A4A' }}>Hold your breath gently</p>
+            </div>
+            <div className="bg-white/80 backdrop-blur p-4 rounded-lg">
+              <div className="mb-2" style={{ color: '#7B9ACC' }}>Exhale (6s)</div>
+              <p style={{ color: '#4A4A4A' }}>Breathe out slowly through your mouth</p>
+            </div>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    </section>
   );
 }
