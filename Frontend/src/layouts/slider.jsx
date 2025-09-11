@@ -61,7 +61,7 @@ const Sidebar = () => {
           <Smile className="w-5 h-5" />
         </NavLink>
         <NavLink
-          to="/dashboard"
+          to="/gamehub"
           className={({ isActive }) =>
             `flex items-center justify-center w-10 h-10 rounded-lg transition hover:bg-blue-100  ${
               isActive ? "bg-blue-100 text-blue-600" : "text-gray-500"

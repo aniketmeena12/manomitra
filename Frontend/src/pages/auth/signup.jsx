@@ -1,22 +1,22 @@
-import React, { useContext, useState } from 'react'
-import ProfilePhotoSelector from '../../components/ProfilePhotoSelector';
-import { useNavigate } from 'react-router-dom';
-import Input from '../../components/Inputs/Input';
-import { UserContext } from '../../context/usercontext';
-import { API_PATHS } from '../../utilis/apipaths';
-import axiosInstance from '../../utilis/axiosinstance';
-import uploadImage from '../../utilis/uploadimage';
-import { validateEmail } from '../../utilis/helper';
-import { Button } from '@/components/ui/button';
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Inputs/Input";
+import { UserContext } from "../../context/usercontext";
+import { API_PATHS } from "../../utilis/apipaths";
+import axiosInstance from "../../utilis/axiosinstance";
+import uploadImage from "../../utilis/uploadimage";
+import { validateEmail } from "../../utilis/helper";
+import { Button } from "@/components/ui/button";
 
-const SignUp = ({setCurrentPage}) => {
+const SignUp = ({ setCurrentPage }) => {
   const [profilePic, setProfilePic] = useState(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const {updateUser} = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   // Handle Signup Form Submit
@@ -24,36 +24,45 @@ const SignUp = ({setCurrentPage}) => {
     e.preventDefault();
     let profileImageUrl = "";
 
-  if (!fullName) {
-    setError("Please enter full name.");
-    return;
-  }
+    if (!fullName) {
+      setError("Please enter full name.");
+      return;
+    }
 
-  if (!validateEmail(email)) {
-    setError("Please enter a valid email address.");
-    return;
-  }
-  if (!password) {
-    setError("Please enter a password.");
-    return;
-  }
-  setError(""); // Clear any previous error
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
 
-// SignUp API Call
+    if (!password) {
+      setError("Please enter a password.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError(""); // Clear any previous error
+
+    // SignUp API Call
     try {
-      if(profilePic){
+      if (profilePic) {
         const imgUploadRes = await uploadImage(profilePic);
         profileImageUrl = imgUploadRes.imageURL || "";
       }
-      const response = await axiosInstance.post( API_PATHS.AUTH.REGISTER, {
-        name:fullName,
+
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        name: fullName,
         email,
         password,
         profileImageUrl,
       });
-      const {token} = response.data;
-      if(token){
-        localStorage.setItem("token",token);
+
+      const { token } = response.data;
+      if (token) {
+        localStorage.setItem("token", token);
         updateUser(response.data);
         navigate("/dashboard");
       }
@@ -75,7 +84,6 @@ const SignUp = ({setCurrentPage}) => {
       </p>
 
       <form onSubmit={handleSignUp}>
-        <ProfilePhotoSelector image={profilePic} setImage={setProfilePic}/>
         <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
           <Input
             value={fullName}
@@ -100,18 +108,29 @@ const SignUp = ({setCurrentPage}) => {
             placeholder="Min 8 Characters"
             type="password"
           />
+
+          <Input
+            value={confirmPassword}
+            onChange={({ target }) => setConfirmPassword(target.value)}
+            label="Confirm Password"
+            placeholder="Confirm password"
+            type="password"
+          />
         </div>
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-        <Button type="submit"  className="w-full text-white bg-[#7B9ACC] hover:bg-[#b7cef4] cursor-pointer"
-         >
+        <Button
+          type="submit"
+          className="w-full text-white bg-[#7B9ACC] hover:bg-[#b7cef4] cursor-pointer"
+        >
           SIGN UP
         </Button>
 
         <p className="text-[13px] text-slate-800 mt-3">
           Already an account?{" "}
           <button
+            type="button"
             className="font-medium text-primary underline cursor-pointer"
             onClick={() => {
               setCurrentPage("login");
