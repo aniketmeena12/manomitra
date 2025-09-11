@@ -85,7 +85,7 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-4">
               Complete a 2-min breathing exercise to earn points.
             </p>
-            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer">
               Start Exercise
             </button>
           </div>
@@ -139,7 +139,7 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-4">
               Check your mental wellness with a quick test.
             </p>
-            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer">
               Take Assessment
             </button>
           </div>
@@ -152,7 +152,7 @@ const Dashboard = () => {
             </div>
             <p className="text-gray-600 mb-2">Counselor: Dr. Mehta</p>
             <p className="text-gray-800 font-semibold">Tomorrow, 5:00 PM</p>
-            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer">
               Join Session
             </button>
           </div>
@@ -182,7 +182,7 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-2">
               Guided meditations, self-help articles, and videos.
             </p>
-            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 transition-colors cursor-pointer">
+            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer">
               Explore
             </button>
           </div>

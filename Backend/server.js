@@ -29,9 +29,6 @@ connectDB();
 // ✅ Body parser
 app.use(express.json());
 
-// ✅ Static file serving (uploads, profile images, etc.)
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
 // ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/mood", moodRoutes); // <-- mood tracking API

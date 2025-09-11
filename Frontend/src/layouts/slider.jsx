@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, BarChart, User, Settings, Book, Calendar, Group, Meh, Smile } from "lucide-react";
+import { Home, BarChart, User, Settings, Book, Calendar, Group, Meh, Smile, Shapes } from "lucide-react";
 
 const Sidebar = () => {
   return (
@@ -59,6 +59,16 @@ const Sidebar = () => {
           }
         >
           <Smile className="w-5 h-5" />
+        </NavLink>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            `flex items-center justify-center w-10 h-10 rounded-lg transition hover:bg-blue-100  ${
+              isActive ? "bg-blue-100 text-blue-600" : "text-gray-500"
+            }`
+          }
+        >
+          <Shapes className="w-5 h-5" />
         </NavLink>
         
       </nav>

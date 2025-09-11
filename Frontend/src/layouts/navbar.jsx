@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Bell, Settings, LogOut, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function DashboardHeader() {
   const { user, loading, clearUser } = useContext(UserContext);
@@ -35,7 +36,7 @@ export function DashboardHeader() {
   return (
     <header className="border-b border-[#A8D0E6] bg-white px-6 py-4">
       <div className="flex items-center justify-between">
-        {/* Left side */}
+        <Link to="/" className="flex items-center gap-3  transition">
         <div className="flex items-center gap-3">
           <img
             src="/logo.png" // replace with your logo path
@@ -46,7 +47,7 @@ export function DashboardHeader() {
             ManoMitra
           </h1>
         </div>
-
+        </Link>
         {/* Right side */}
         <div className="flex items-center gap-4">
           {/* Notification bell */}
