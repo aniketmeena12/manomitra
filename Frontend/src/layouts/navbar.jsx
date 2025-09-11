@@ -33,42 +33,42 @@ export function DashboardHeader() {
   }
 
   return (
-    <header
-      className="border-b px-6 py-4"
-      style={{ backgroundColor: "white", borderColor: "#A8D0E6" }}
-    >
+    <header className="border-b border-[#A8D0E6] bg-white px-6 py-4">
       <div className="flex items-center justify-between">
         {/* Left side */}
         <div className="flex items-center gap-3">
-          <div>
-            <h1 className="text-xl" style={{ color: "#4A4A4A" }}>
-              ManoMitra
-            </h1>
-          </div>
+          <img
+            src="/logo.png" // replace with your logo path
+            alt="Logo"
+            className="w-10 h-10 object-contain"
+          />
+          <h1 className="text-xl font-semibold text-[#4A4A4A]">
+            ManoMitra
+          </h1>
         </div>
 
         {/* Right side */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" className="relative">
-            <Bell className="w-5 h-5" style={{ color: "#4A4A4A" }} />
-            <span
-              className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-              style={{ backgroundColor: "#ef4444" }}
-            ></span>
+          {/* Notification bell */}
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="w-5 h-5 text-[#4A4A4A]" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500"></span>
           </Button>
 
+          {/* User dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2 px-2">
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 px-2 hover:bg-gray-100"
+              >
                 <Avatar className="w-8 h-8">
                   <AvatarImage src="" />
-                  <AvatarFallback
-                    style={{ backgroundColor: "#A8D0E6", color: "#4A4A4A" }}
-                  >
+                  <AvatarFallback className="bg-[#A8D0E6] text-[#4A4A4A]">
                     {getInitials(user?.name)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="hidden md:block" style={{ color: "#4A4A4A" }}>
+                <span className="hidden md:block text-[#4A4A4A]">
                   {user?.name || "Guest"}
                 </span>
               </Button>
@@ -85,10 +85,10 @@ export function DashboardHeader() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                  clearUser();            // clear user
-                  window.location.href = "/"; // ✅ go to landing page
+                  clearUser(); // clear context
+                  window.location.href = "/"; // redirect to landing
                 }}
-                className="text-red-600"
+                className="text-red-600 focus:text-red-600"
                 disabled={!user}
               >
                 <LogOut className="mr-2 h-4 w-4" />

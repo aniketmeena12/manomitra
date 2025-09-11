@@ -5,13 +5,7 @@ const Sidebar = () => {
   return (
     <aside className="h-screen w-16 border-r bg-white flex flex-col items-center py-4 shadow-sm">
       {/* Logo */}
-      <div className="mb-6">
-        <img
-          src="/logo.png" // replace with your logo path
-          alt="Logo"
-          className="w-10 h-10 object-contain"
-        />
-      </div>
+      
 
       {/* Nav Links */}
       <nav className="flex flex-col gap-6">
