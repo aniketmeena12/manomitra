@@ -12,6 +12,7 @@ import {
 import { Calendar, Users, BookOpen } from "lucide-react";
 import axios from "axios";
 import { UserContext } from "@/context/usercontext";
+import { NavLink } from "react-router-dom";
 
 const Dashboard = () => {
   const [moodData, setMoodData] = useState([]);
@@ -85,9 +86,14 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-4">
               Complete a 2-min breathing exercise to earn points.
             </p>
-            <button className="bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer">
-              Start Exercise
-            </button>
+            <NavLink
+  to="/breathing"
+  className="inline-block bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full 
+  hover:bg-yellow-100 hover:text-black border border-yellow-50 hover:border-yellow-300 
+  transition-colors cursor-pointer text-center"
+>
+  Start Exercise
+</NavLink>
           </div>
 
           {/* Mood Tracker */}

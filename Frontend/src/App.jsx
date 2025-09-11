@@ -10,6 +10,8 @@ import Peerform from "./pages/home/peerform";
 import Appointmentbook from "./pages/home/counsellingbook";
 import MoodTrackerPage from "./pages/home/moodtracker";
 import { Toaster } from "sonner";
+import DailyWellnessQuest from "./pages/useritems/dailyWllnQst";
+import PositiveHabitTracker from "./pages/useritems/dailyWllnQst";
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
             <Route path="/community" element={<Peerform />} />
             <Route path="/counselingsessions" element={<Appointmentbook />} />
             <Route path="/moodtracker" element={<MoodTrackerPage />} />
+            <Route path="/breathing" element={<PositiveHabitTracker/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
