@@ -77,7 +77,7 @@ export default function PeerForum() {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-6 p-6 bg-[rgba(255,255,255,0.5)]  rounded-3xl min-h-screen">
+    <div className="grid grid-cols-4 gap-6 p-6 bg-[rgba(146,141,144,0.63)]  rounded-3xl min-h-screen">
       {/* Forum Main Section */}
       <div className="col-span-3">
         
