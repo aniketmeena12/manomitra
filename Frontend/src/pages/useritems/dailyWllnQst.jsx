@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function PositiveHabitTracker({ streak = 4 }) {
-  const [points, setPoints] = useState(120);
-  const [completed, setCompleted] = useState([]);
+// Utility to format date as YYYY-MM-DD
+const getToday = () => new Date().toISOString().split("T")[0];
 
+export default function PositiveHabitTracker({ userId = "guest" }) {
   const habits = [
     { id: 1, name: "💧 Drink Water", benefit: "Keeps you hydrated & improves focus", reward: 10 },
     { id: 2, name: "📔 Journal Daily", benefit: "Clears your mind & reduces stress", reward: 10 },
@@ -16,15 +16,51 @@ export default function PositiveHabitTracker({ streak = 4 }) {
     { id: 9, name: "🎶 Listen to Music", benefit: "Lifts mood instantly", reward: 5 },
   ];
 
+  // Load user data from localStorage
+  const loadUserData = () => {
+    const data = JSON.parse(localStorage.getItem("habitData")) || {};
+    const today = getToday();
+
+    // If new day → reset completed habits
+    if (data[userId]?.lastDate !== today) {
+      return {
+        points: data[userId]?.points || 0,
+        streak: data[userId]?.streak || 0,
+        completed: [],
+        lastDate: today,
+      };
+    }
+    return data[userId] || { points: 0, streak: 0, completed: [], lastDate: today };
+  };
+
+  const [userData, setUserData] = useState(loadUserData);
+
+  // Save whenever userData changes
+  useEffect(() => {
+    const allUsers = JSON.parse(localStorage.getItem("habitData")) || {};
+    allUsers[userId] = userData;
+    localStorage.setItem("habitData", JSON.stringify(allUsers));
+  }, [userData, userId]);
+
   const handleComplete = (habit) => {
-    if (!completed.includes(habit.id)) {
-      setCompleted([...completed, habit.id]);
-      setPoints(points + habit.reward);
+    if (!userData.completed.includes(habit.id)) {
+      const updatedCompleted = [...userData.completed, habit.id];
+      let newData = {
+        ...userData,
+        completed: updatedCompleted,
+        points: userData.points + habit.reward,
+      };
+
+      // If all habits done → increase streak
+      if (updatedCompleted.length === habits.length) {
+        newData.streak = userData.streak + 1;
+      }
+
+      setUserData(newData);
     }
   };
 
-  // progress calc
-  const progress = Math.round((completed.length / habits.length) * 100);
+  const progress = Math.round((userData.completed.length / habits.length) * 100);
 
   return (
     <div className="bg-[rgb(228,217,255,0.3)] shadow-md rounded-2xl p-5">
@@ -32,7 +68,7 @@ export default function PositiveHabitTracker({ streak = 4 }) {
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-lg">🌱 Positive Habit Tracker</h3>
         <span className="bg-yellow-100 text-yellow-700 text-sm font-medium px-3 py-1 rounded-full">
-          🔥 Streak: {streak} days
+          🔥 Streak: {userData.streak} days
         </span>
       </div>
 
@@ -42,7 +78,7 @@ export default function PositiveHabitTracker({ streak = 4 }) {
 
       {/* Points */}
       <div className="mb-4 text-green-600 font-semibold">
-        🎯 {points} Points Earned
+        🎯 {userData.points} Points Earned
       </div>
 
       {/* Progress Bar */}
@@ -53,7 +89,7 @@ export default function PositiveHabitTracker({ streak = 4 }) {
         ></div>
       </div>
       <p className="text-sm text-gray-600 mb-4">
-        {completed.length}/{habits.length} habits completed ({progress}%)
+        {userData.completed.length}/{habits.length} habits completed ({progress}%)
       </p>
 
       {/* Motivational Message */}
@@ -71,14 +107,14 @@ export default function PositiveHabitTracker({ streak = 4 }) {
             key={habit.id}
             onClick={() => handleComplete(habit)}
             className={`p-3 rounded-lg border cursor-pointer transition ${
-              completed.includes(habit.id)
+              userData.completed.includes(habit.id)
                 ? "bg-green-100 line-through text-gray-500"
                 : "bg-white/70 hover:shadow-md"
             }`}
           >
             <div className="flex justify-between items-center">
               <span className="font-medium">{habit.name}</span>
-              {completed.includes(habit.id) && <span>✅</span>}
+              {userData.completed.includes(habit.id) && <span>✅</span>}
             </div>
             <p className="text-xs text-gray-600">{habit.benefit}</p>
           </li>

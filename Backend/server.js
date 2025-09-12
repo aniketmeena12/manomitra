@@ -1,15 +1,17 @@
+// Load environment variables
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const helmet = require("helmet");
 
 // DB connection
 const connectDB = require("./config/db");
 
 // Routes
-const authRoutes = require("./routes/authroute");
-const moodRoutes = require("./routes/moodroutes"); // ✅ CommonJS import
+const authRoutes = require("./routes/authroute");   // ✅ user login/register
+const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking
+const habitRoutes = require("./routes/habitRoutes"); // ✅ habit tracker
 
 const app = express();
 
@@ -17,7 +19,7 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: "*", // ⚠️ Set your frontend URL in production
+    origin: "*", // ⚠️ change to your frontend URL in production
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -30,8 +32,9 @@ connectDB();
 app.use(express.json());
 
 // ✅ Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/mood", moodRoutes); // <-- mood tracking API
+app.use("/api/authroute", authRoutes);
+app.use("/api/moodroutes", moodRoutes);
+app.use("/api/habitsRoutes", habitRoutes); // <-- habit tracking API
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {
