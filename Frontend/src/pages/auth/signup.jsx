@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
@@ -7,6 +8,18 @@ import axiosInstance from "../../utilis/axiosinstance";
 import uploadImage from "../../utilis/uploadimage";
 import { validateEmail } from "../../utilis/helper";
 import { Button } from "@/components/ui/button";
+=======
+import React, { useContext, useState } from 'react'
+
+import { useNavigate } from 'react-router-dom';
+import Input from '../../components/Inputs/Input';
+import { UserContext } from '../../context/usercontext';
+import { API_PATHS } from '../../utilis/apipaths';
+import axiosInstance from '../../utilis/axiosinstance';
+import uploadImage from '../../utilis/uploadimage';
+import { validateEmail } from '../../utilis/helper';
+import { Button } from '@/components/ui/button';
+>>>>>>> questback
 
 const SignUp = ({ setCurrentPage }) => {
   const [profilePic, setProfilePic] = useState(null);
