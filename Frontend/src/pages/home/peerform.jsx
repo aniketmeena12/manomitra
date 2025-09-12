@@ -1,81 +1,221 @@
 import React, { useState } from "react";
 
-const Peerform = () => {
-  const [problems, setProblems] = useState([]);
-  const [text, setText] = useState("");
+// Sample Threads
+const sampleThreads = [
+  {
+    id: 1,
+    title: "Feeling anxious before exams",
+    mood: "😔",
+    category: "Anxiety",
+    author: "Anonymous",
+    comments: [{ id: 1, text: "You're not alone, stay strong 💪", author: "StudentX" }],
+    reactions: { like: 2, love: 1, hug: 1 },
+  },
+  {
+    id: 2,
+    title: "Best self-care routines?",
+    mood: "😊",
+    category: "Self-Care",
+    author: "Student123",
+    comments: [],
+    reactions: { like: 0, love: 0, hug: 0 },
+  },
+];
 
-  const addProblem = () => {
-    if (!text.trim()) return;
-    setProblems([
-      ...problems,
-      { id: Date.now(), text, reactions: { like: 0, support: 0, sad: 0 } }
-    ]);
-    setText("");
+export default function PeerForum() {
+  const [threads, setThreads] = useState(sampleThreads);
+  const [newPost, setNewPost] = useState("");
+  const [mood, setMood] = useState("😊");
+  const [anonymous, setAnonymous] = useState(true);
+
+  const addThread = () => {
+    if (!newPost.trim()) return;
+    const newThread = {
+      id: threads.length + 1,
+      title: newPost,
+      mood,
+      category: "General",
+      author: anonymous ? "Anonymous" : "You",
+      comments: [],
+      reactions: { like: 0, love: 0, hug: 0 },
+    };
+    setThreads([newThread, ...threads]);
+    setNewPost("");
   };
 
-  const handleReaction = (id, type) => {
-    setProblems(
-      problems.map((p) =>
-        p.id === id
-          ? { ...p, reactions: { ...p.reactions, [type]: p.reactions[type] + 1 } }
-          : p
+  const addComment = (threadId, text) => {
+    if (!text.trim()) return;
+    setThreads(
+      threads.map((t) =>
+        t.id === threadId
+          ? {
+              ...t,
+              comments: [
+                ...t.comments,
+                { id: t.comments.length + 1, text, author: "You" },
+              ],
+            }
+          : t
+      )
+    );
+  };
+
+  const addReaction = (threadId, type) => {
+    setThreads(
+      threads.map((t) =>
+        t.id === threadId
+          ? {
+              ...t,
+              reactions: {
+                ...t.reactions,
+                [type]: t.reactions[type] + 1,
+              },
+            }
+          : t
       )
     );
   };
 
   return (
-    <div className="bg-[rgb(255,255,255,0.6)] rounded-xl p-5 shadow-md">
-    <div className="max-w-xl mx-auto p-6">
-      {/* Problem Input */}
-      <div className="mb-6">
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Write your problem here..."
-          className="w-full border rounded-lg p-3 mb-2 input-box"
-        />
-        <button
-          onClick={addProblem}
-          className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
-        >
-          Post Problem
-        </button>
-      </div>
+    <div className="grid grid-cols-4 gap-6 p-6 bg-[rgba(255,255,255,0.5)]  rounded-3xl min-h-screen">
+      {/* Forum Main Section */}
+      <div className="col-span-3">
+        
 
-      {/* Problem List */}
-      <div className="space-y-4">
-        {problems.map((problem) => (
-          <div
-            key={problem.id}
-            className="p-4 bg-white rounded-lg shadow border"
-          >
-            <p className="text-gray-800">{problem.text}</p>
-            <div className="flex space-x-4 mt-3 text-sm">
+        <h2 className="text-2xl font-bold mb-4 text-indigo-700">Peer Forum</h2>
+
+        {/* Create Post */}
+        <div className="bg-white p-4 rounded-2xl shadow mb-6">
+          <textarea
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
+            placeholder="Share your thoughts..."
+            className="w-full border p-2 rounded-md"
+          />
+          <div className="flex justify-between items-center mt-2">
+            <select
+              value={mood}
+              onChange={(e) => setMood(e.target.value)}
+              className="border p-1 rounded-md"
+            >
+              <option>😊</option>
+              <option>😔</option>
+              <option>😤</option>
+              <option>😴</option>
+              <option>🤯</option>
+            </select>
+
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={anonymous}
+                onChange={() => setAnonymous(!anonymous)}
+              />
+              <span>Post Anonymously</span>
+            </label>
+
+            <button
+              onClick={addThread}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+            >
+              Post
+            </button>
+          </div>
+        </div>
+
+        {/* Threads List */}
+        {threads.map((thread) => (
+          <div key={thread.id} className="bg-white p-4 rounded-2xl shadow mb-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <span className="text-xl">{thread.mood}</span>
+              <h3 className="font-semibold text-lg">{thread.title}</h3>
+            </div>
+            <p className="text-sm text-gray-500 mb-2">
+              Category: {thread.category} | By {thread.author}
+            </p>
+
+            {/* Reactions */}
+            <div className="flex space-x-3 mb-3">
               <button
-                onClick={() => handleReaction(problem.id, "like")}
-                className="flex items-center gap-1 hover:text-orange-500"
+                onClick={() => addReaction(thread.id, "like")}
+                className="px-2 py-1 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                👍 {problem.reactions.like}
+                👍 {thread.reactions.like}
               </button>
               <button
-                onClick={() => handleReaction(problem.id, "support")}
-                className="flex items-center gap-1 hover:text-orange-500"
+                onClick={() => addReaction(thread.id, "love")}
+                className="px-2 py-1 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                🤝 {problem.reactions.support}
+                ❤ {thread.reactions.love}
               </button>
               <button
-                onClick={() => handleReaction(problem.id, "sad")}
-                className="flex items-center gap-1 hover:text-orange-500"
+                onClick={() => addReaction(thread.id, "hug")}
+                className="px-2 py-1 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                😢 {problem.reactions.sad}
+                🤗 {thread.reactions.hug}
               </button>
+            </div>
+
+            {/* Comments */}
+            <div className="mt-2">
+              <h4 className="font-semibold text-sm mb-1">Comments:</h4>
+              {thread.comments.map((c) => (
+                <p key={c.id} className="text-sm text-gray-700 ml-2">
+                  <span className="font-medium">{c.author}:</span> {c.text}
+                </p>
+              ))}
+              <CommentBox threadId={thread.id} addComment={addComment} />
             </div>
           </div>
         ))}
       </div>
-    </div>
+
+      {/* Sidebar */}
+      <div className="col-span-1 bg-white p-4 rounded-2xl shadow">
+        <h3 className="text-lg font-semibold mb-2 text-indigo-600">Quick Help</h3>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li>📞 Helpline: 1800-123-456</li>
+          <li>🧘 Guided Meditation</li>
+          <li>
+            📺{" "}
+            <a
+              href="https://youtube.com"
+              className="text-indigo-600 underline"
+            >
+              Wellness Videos
+            </a>
+          </li>
+          <li>💡 Tip: “This forum is peer support, not medical advice.”</li>
+        </ul>
+      </div>
     </div>
   );
-};
+}
 
-export default Peerform;
+// Comment box component
+function CommentBox({ threadId, addComment }) {
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = () => {
+    addComment(threadId, comment);
+    setComment("");
+  };
+
+  return (
+    <div className="flex mt-2 space-x-2">
+      <input
+        type="text"
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        placeholder="Write a comment..."
+        className="flex-grow border p-1 rounded-md text-sm"
+      />
+      <button
+        onClick={handleSubmit}
+        className="bg-indigo-500 text-white px-2 py-1 rounded-md text-sm hover:bg-indigo-600"
+      >
+        Reply
+      </button>
+    </div>
+  );
+}

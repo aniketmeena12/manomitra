@@ -161,7 +161,7 @@ export default function AppointmentBooking() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-100 via-purple-100 to-blue-100 px-4 py-10">
+    <div className="min-h-screen w-full bg-[rgb(86,5,125,0.3)] rounded-3xl  px-4 py-10">
       <div className="mx-auto max-w-6xl">
         {/* Step 1 */}
         {step === 1 && (
