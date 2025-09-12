@@ -75,10 +75,12 @@ export function DashboardHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
+              <Link to="/profilesetting">
               <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
                 Profile Settings
               </DropdownMenuItem>
+            </Link>
               <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
                 Preferences

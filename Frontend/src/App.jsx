@@ -14,6 +14,7 @@ import DailyWellnessQuest from "./pages/useritems/dailyWllnQst";
 import PositiveHabitTracker from "./pages/useritems/dailyWllnQst";
 import SmallGameHub from "./pages/smallgame/smallgamehub";
 import Assestmenthub from "./pages/home/Assestmenthub";
+import ProfilePage from "./pages/auth/profilesetting";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             <Route path="/moodtracker" element={<MoodTrackerPage />} />
             <Route path="/breathing" element={<PositiveHabitTracker/>}/>
             <Route path="/gamehub" element={<SmallGameHub/>}/>
+             <Route path="/profilesetting" element={<ProfilePage />} />
              <Route path="/selfassestments" element={<Assestmenthub/>}/>
           </Route>
         </Routes>
