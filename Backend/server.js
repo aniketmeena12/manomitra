@@ -9,9 +9,10 @@ const helmet = require("helmet");
 const connectDB = require("./config/db");
 
 // Routes
-const authRoutes = require("./routes/authroute");   // ✅ user login/register
-const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking
+const authRoutes = require("./routes/authRoutes");     // ✅ user login/register
+const moodRoutes = require("./routes/moodRoutes");   // ✅ mood tracking
 const habitRoutes = require("./routes/habitRoutes"); // ✅ habit tracker
+ // ✅ peer problem sharing
 
 const app = express();
 
@@ -19,7 +20,7 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: "*", // ⚠️ change to your frontend URL in production
+    origin: "*", // ⚠️ change to frontend URL in production
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -32,9 +33,10 @@ connectDB();
 app.use(express.json());
 
 // ✅ Routes
-app.use("/api/authroute", authRoutes);
-app.use("/api/moodroutes", moodRoutes);
-app.use("/api/habitsRoutes", habitRoutes); // <-- habit tracking API
+app.use("/api/auth", authRoutes);
+app.use("/api/moods", moodRoutes);
+app.use("/api/habits", habitRoutes);
+app.use("/api/peerform", peerformRoutes); // <-- New Peerform API
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {

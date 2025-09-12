@@ -161,8 +161,9 @@ export default function AppointmentBooking() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[rgb(86,5,125,0.3)] rounded-3xl  px-4 py-10">
-      <div className="mx-auto max-w-6xl">
+    <div className="flex justify-center items-center">
+    <div className="h-100 w-300 flex items-center justify-between bg-[rgb(86,5,125,0.3)] rounded-3xl  px-4 py-10">
+      <div className="mx-auto flex justify-center items-center">
         {/* Step 1 */}
         {step === 1 && (
           <motion.div
@@ -370,6 +371,7 @@ export default function AppointmentBooking() {
           </motion.div>
         )}
       </div>
+    </div>
     </div>
   );
 }

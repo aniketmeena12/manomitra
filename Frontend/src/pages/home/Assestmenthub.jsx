@@ -44,9 +44,9 @@ const AssessmentHub = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 text-slate-800 flex">
+    <div className="min-h-screen bg-gray-50/60 text-slate-800 flex rounded-2xl">
       {/* Sidebar categories */}
-      <aside className="w-56 bg-white border-r shadow-sm h-screen sticky top-0 overflow-y-auto">
+      <aside className="w-56 bg-white border-r shadow-sm h-screen sticky rounded-2xl top-0 overflow-y-auto">
         <div className="p-4">
           <h3 className="text-sm font-semibold mb-3">Categories</h3>
           <div className="flex flex-col gap-2">
@@ -78,7 +78,7 @@ const AssessmentHub = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((a) => (
-            <div key={a.id} className="bg-white p-4 rounded-xl shadow-sm border flex flex-col justify-between">
+            <div key={a.id} className="bg-white p-4 rounded-xl w-85 shadow-sm border flex flex-col justify-between">
               <div>
                 <h3 className="font-medium text-lg">{a.title}</h3>
                 <p className="text-sm text-slate-500">{a.desc}</p>
