@@ -13,6 +13,7 @@ import { Toaster } from "sonner";
 import DailyWellnessQuest from "./pages/useritems/dailyWllnQst";
 import PositiveHabitTracker from "./pages/useritems/dailyWllnQst";
 import SmallGameHub from "./pages/smallgame/smallgamehub";
+import Assestmenthub from "./pages/home/Assestmenthub";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path="/moodtracker" element={<MoodTrackerPage />} />
             <Route path="/breathing" element={<PositiveHabitTracker/>}/>
             <Route path="/gamehub" element={<SmallGameHub/>}/>
+             <Route path="/selfassestments" element={<Assestmenthub/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

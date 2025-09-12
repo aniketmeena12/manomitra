@@ -144,7 +144,7 @@ const Dashboard = () => {
                 Check your mental wellness with a quick test.
               </p>
               <NavLink
-                to="/breathing"
+                to="/selfassestments"
                 className="inline-block bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer"
               >
                 Click to Evaluate
