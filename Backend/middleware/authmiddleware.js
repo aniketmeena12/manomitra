@@ -7,8 +7,6 @@ const protect = async (req, res, next) => {
   let token;
 
   try {
-    let token;
-
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
@@ -25,7 +23,6 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ message: "User not found, invalid token" });
       }
 
-      return next();
       return next();
     }
 

@@ -10,7 +10,7 @@ const connectDB = require("./config/db");
 
 // Routes
 const authRoutes = require("./routes/authRoutes");     // ✅ user login/register
-const moodRoutes = require("./routes/moodRoutes");   // ✅ mood tracking
+const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking
 const habitRoutes = require("./routes/habitRoutes"); // ✅ habit tracker
  // ✅ peer problem sharing
 
