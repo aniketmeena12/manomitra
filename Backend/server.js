@@ -9,9 +9,10 @@ const helmet = require("helmet");
 const connectDB = require("./config/db");
 
 // Routes
-const authRoutes = require("./routes/authroute");   // ✅ user login/register
+const authRoutes = require("./routes/authRoutes");   // ✅ user login/register
 const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking
 const habitRoutes = require("./routes/habitRoutes"); // ✅ habit tracker
+const appointmentRoutes = require("./routes/appointmentRoutes");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use("/api/authroute", authRoutes);
 app.use("/api/moodroutes", moodRoutes);
 app.use("/api/habitsRoutes", habitRoutes); // <-- habit tracking API
+app.use("/api/appointments", appointmentRoutes);
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {

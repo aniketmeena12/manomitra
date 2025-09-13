@@ -1,6 +1,6 @@
 const express = require("express");
 const Mood = require("../models/MoodModel");
-const { protect } = require("../middleware/authmiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

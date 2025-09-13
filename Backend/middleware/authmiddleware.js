@@ -6,14 +6,16 @@ const protect = async (req, res, next) => {
   try {
     let token;
 
-    // ✅ Check for Bearer token
-    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
       token = req.headers.authorization.split(" ")[1];
 
-      // ✅ Verify token
+      // Verify JWT
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // ✅ Attach user to request (without password)
+      // Attach user object to request (excluding password)
       req.user = await User.findById(decoded.id).select("-password");
 
       if (!req.user) {
@@ -30,4 +32,25 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+// ✅ Middleware for appointment-specific access (e.g., only users can book)
+const appointmentProtect = async (req, res, next) => {
+  await protect(req, res, async () => {
+    // Example: if in future you add roles (patient, doctor, admin)
+    if (!req.user.role || req.user.role !== "patient") {
+      return res.status(403).json({ message: "Only patients can book appointments" });
+    }
+    next();
+  });
+};
+
+// ✅ Middleware for doctors to view/manage appointments
+const doctorProtect = async (req, res, next) => {
+  await protect(req, res, async () => {
+    if (!req.user.role || req.user.role !== "doctor") {
+      return res.status(403).json({ message: "Only doctors can manage appointments" });
+    }
+    next();
+  });
+};
+
+module.exports = { protect, appointmentProtect, doctorProtect };
