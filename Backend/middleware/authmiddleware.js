@@ -4,6 +4,8 @@ const User = require("../models/userModel");
 
 // Protect middleware -> checks token and attaches user
 const protect = async (req, res, next) => {
+  let token;
+
   try {
     let token;
 
@@ -23,6 +25,7 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ message: "User not found, invalid token" });
       }
 
+      return next();
       return next();
     }
 
