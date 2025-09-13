@@ -12,7 +12,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");     // ✅ user login/register
 const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking
 const habitRoutes = require("./routes/habitRoutes"); // ✅ habit tracker
- // ✅ peer problem sharing
+const peerformRoutes = require("./routes/problemRoutes")  // ✅ peer problem sharing
 
 const app = express();
 
