@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,7 +15,11 @@ const userSchema = new mongoose.Schema(
 
     password: { type: String, required: true, minlength: 6 },
 
-    profileImageUrl: { type: String, default: "" },
+    bio: { type: String, default: "" },
+    profilePic: { type: String, default: "" },
+    height: { type: Number, default: null },
+    weight: { type: Number, default: null },
+    psychCategory: { type: String, default: "" },
 
     // ✅ Habit Tracker Fields
     streak: { type: Number, default: 0 }, // consecutive days completed

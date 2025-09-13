@@ -1,66 +1,44 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-const DashboardMoodGraph = () => {
-  const [moodData, setMoodData] = useState([]);
-  const [loading, setLoading] = useState(true);
+function MoodOverview() {
+  const [todayMood, setTodayMood] = useState(null);
 
   useEffect(() => {
-    fetchMoods();
+    const fetchMood = async () => {
+      try {
+        const res = await axios.get("/api/moods"); // your backend route
+        const moods = res.data;
+        const today = new Date().toISOString().split("T")[0];
+        const todayEntry = moods.find((m) => m.date === today);
+        setTodayMood(todayEntry?.mood || "Not tracked yet");
+      } catch (err) {
+        console.error("Error fetching moods:", err);
+      }
+    };
+    fetchMood();
   }, []);
 
-  const fetchMoods = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:8000/api/mood", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Mood API data:", res.data);
-      setMoodData(res.data); // ✅ backend returns week array
-    } catch (err) {
-      console.error("Error fetching moods:", err.response?.data || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const hasData = moodData.some((entry) => entry.mood > 0);
-
   return (
-    <div className="bg-white shadow rounded-lg p-4">
-      <h3 className="text-sm font-semibold mb-2">Mood (Last 7 days)</h3>
-
-      {loading ? (
-        <p className="text-gray-500 text-sm">Loading...</p>
-      ) : !hasData ? (
-        <p className="text-gray-500 text-sm">No mood data logged yet</p>
-      ) : (
-        <ResponsiveContainer width="100%" height={150}>
-          <LineChart data={moodData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" fontSize={10} />
-            <YAxis domain={[0, 5]} />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="mood"
-              stroke="#3b82f6"
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Mood Overview</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col items-center space-y-3">
+        <p className="text-lg font-medium">
+          Today’s Mood:{" "}
+          <span className="font-bold text-primary">
+            {todayMood}
+          </span>
+        </p>
+        <Button asChild>
+          <a href="/dashboard/mood">View Full Tracker</a>
+        </Button>
+      </CardContent>
+    </Card>
   );
-};
+}
 
-export default DashboardMoodGraph;
+export default MoodOverview;

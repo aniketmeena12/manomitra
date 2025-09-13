@@ -1,48 +1,63 @@
 const Mood = require("../models/MoodModel");
 
-// @desc Save or update mood for a date
-// @route POST /api/moods
-// @access Private
+// Save or update mood
 const saveMood = async (req, res) => {
+  const { date, mood } = req.body;
   try {
-    const { date, mood, journal, habits } = req.body;
-
-    let entry = await Mood.findOne({ user: req.user._id, date });
-
-    if (entry) {
-      // update existing
-      entry.mood = mood || entry.mood;
-      if (journal) entry.journal.push(journal);
-      if (habits) entry.habits = { ...entry.habits, ...habits };
-      await entry.save();
-    } else {
-      // create new
-      entry = await Mood.create({
-        user: req.user._id,
-        date,
-        mood,
-        journal: journal ? [journal] : [],
-        habits: habits || {},
-      });
-    }
-
-    res.status(200).json(entry);
-  } catch (error) {
-    console.error("Save Mood Error:", error.message);
-    res.status(500).json({ message: "Server error" });
+    const doc = await Mood.findOneAndUpdate(
+      { user: req.user._id, date },
+      { $set: { mood } },
+      { upsert: true, new: true }
+    );
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-// @desc Get all moods of logged-in user
-// @route GET /api/moods
-// @access Private
+// Get moods
 const getMoods = async (req, res) => {
   try {
-    const moods = await Mood.find({ user: req.user._id }).sort({ date: 1 });
-    res.json(moods);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    const docs = await Mood.find({ user: req.user._id }).sort({ date: -1 });
+    res.json(docs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-module.exports = { saveMood, getMoods };
+// Add journal entry
+const addJournalEntry = async (req, res) => {
+  const { date, entry } = req.body;
+  try {
+    const doc = await Mood.findOneAndUpdate(
+      { user: req.user._id, date },
+      { $push: { journal: entry } },
+      { upsert: true, new: true }
+    );
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Toggle habit
+const toggleHabit = async (req, res) => {
+  const { date, habit, done } = req.body;
+  try {
+    const doc = await Mood.findOneAndUpdate(
+      { user: req.user._id, date },
+      { $set: { [`habits.${habit}`]: done } },
+      { upsert: true, new: true }
+    );
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = {
+  saveMood,
+  getMoods,
+  addJournalEntry,
+  toggleHabit,
+};

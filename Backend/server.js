@@ -13,6 +13,7 @@ const authRoutes = require("./routes/authRoutes");     // ✅ user login/registe
 const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking
 const habitRoutes = require("./routes/habitRoutes"); // ✅ habit tracker
 const peerformRoutes = require("./routes/problemRoutes")  // ✅ peer problem sharing
+const userRoutes = require("./routes/authRoutes"); // or authRoutes if you put it there
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/moods", moodRoutes);
 app.use("/api/habits", habitRoutes);
 app.use("/api/peerform", peerformRoutes); // <-- New Peerform API
+app.use("/api/user", userRoutes);
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {
