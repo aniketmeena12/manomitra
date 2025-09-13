@@ -1,25 +1,34 @@
 const mongoose = require("mongoose");
 
-const MoodSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User", 
-    required: true,
+const moodSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // linked to your User model
+      required: true,
+    },
+    date: {
+      type: String, // YYYY-MM-DD format
+      required: true,
+    },
+    mood: {
+      type: String, // e.g., "Happy", "Sad"
+      required: true,
+    },
+    journal: [
+      {
+        type: String, // multiple journal entries per day
+      },
+    ],
+    habits: {
+      type: Map,
+      of: Boolean, // { "sleep 8hrs": true, "exercise": false }
+      default: {},
+    },
   },
-  day: {
-    type: String,
-    required: true, 
-  },
-  mood: {
-    type: Number,
-    required: true, 
-    min: 1,
-    max: 5,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("Mood", MoodSchema);
+const Mood = mongoose.model("Mood", moodSchema);
+
+module.exports = Mood;
