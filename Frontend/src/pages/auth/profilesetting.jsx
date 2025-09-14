@@ -14,49 +14,36 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    bio: "",
-    profilePic: "",
-    height: "",
-    weight: "",
-    psychCategory: "",
-    streak: 0,
-    wellnessPoints: 0,
-    currentMood: "",
-  });
-
+  const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(profile);
+  const [formData, setFormData] = useState({});
 
-  // Fetch profile & habit data
+  // Fetch profile data
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const resProfile = await axios.get("http://localhost:8000/api/user/profile", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const resHabits = await axios.get("http://localhost:8000/api/habits/userdata", {
+        const res = await axios.get("http://localhost:8000/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setProfile({ ...resProfile.data, ...resHabits.data });
-        setFormData({ ...resProfile.data, ...resHabits.data });
+        setProfile(res.data);
+        setFormData(res.data); // sync formData with latest profile
       } catch (err) {
+        console.error("Profile fetch error:", err.response?.data || err.message);
         toast.error("Failed to fetch profile");
       }
     };
     fetchProfile();
   }, []);
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Save updated profile
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -69,9 +56,18 @@ export default function ProfilePage() {
       setIsEditing(false);
       toast.success("Profile updated successfully!");
     } catch (err) {
+      console.error("Profile update error:", err.response?.data || err.message);
       toast.error("Failed to update profile");
     }
   };
+
+  if (!profile) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-500">Loading profile...</p>
+      </div>
+    );
+  }
 
   const avatarUrl =
     profile.profilePic ||
@@ -99,10 +95,10 @@ export default function ProfilePage() {
             <p className="text-gray-600">{profile.bio}</p>
             <p className="text-gray-500 text-sm">{profile.email}</p>
             <p className="text-gray-500 text-sm">
-              Height: {profile.height} cm | Weight: {profile.weight} kg
+              Height: {profile.height ?? "-"} cm | Weight: {profile.weight ?? "-"} kg
             </p>
             <p className="text-gray-500 text-sm">
-              Category: {profile.psychCategory}
+              Category: {profile.psychCategory || "-"}
             </p>
             <Button className="mt-2" onClick={() => setIsEditing(true)}>
               Edit Profile
@@ -130,48 +126,46 @@ export default function ProfilePage() {
         <Dialog open={isEditing} onOpenChange={setIsEditing}>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle className="text-purple-700">
-                Edit Profile
-              </DialogTitle>
+              <DialogTitle className="text-purple-700">Edit Profile</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4">
               <Input
                 name="name"
-                value={formData.name}
+                value={formData.name || ""}
                 onChange={handleChange}
                 placeholder="Name"
               />
               <Input
                 name="email"
                 type="email"
-                value={formData.email}
+                value={formData.email || ""}
                 onChange={handleChange}
                 placeholder="Email"
               />
               <Textarea
                 name="bio"
-                value={formData.bio}
+                value={formData.bio || ""}
                 onChange={handleChange}
                 placeholder="Bio"
               />
               <Input
                 name="height"
                 type="number"
-                value={formData.height}
+                value={formData.height || ""}
                 onChange={handleChange}
                 placeholder="Height (cm)"
               />
               <Input
                 name="weight"
                 type="number"
-                value={formData.weight}
+                value={formData.weight || ""}
                 onChange={handleChange}
                 placeholder="Weight (kg)"
               />
               <Input
                 name="psychCategory"
-                value={formData.psychCategory}
+                value={formData.psychCategory || ""}
                 onChange={handleChange}
                 placeholder="Psychology Category"
               />

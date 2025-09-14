@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     streak: { type: Number, default: 0 },
     lastHabitDate: { type: String, default: "" }, // YYYY-MM-DD
     completedHabits: { type: Map, of: [String], default: {} }, 
-    // Example: { "2025-09-12": ["1", "3"] } → per-day completed habits
+    // Example: { "2025-09-12": ["1", "3"] }
   },
   { timestamps: true }
 );
