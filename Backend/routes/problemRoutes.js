@@ -1,6 +1,6 @@
 const express = require("express");
 const { addProblem, getProblems, reactProblem } = require("../controllers/problemController");
-const { protect } = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authmiddleware.js");
 
 const router = express.Router();
 
