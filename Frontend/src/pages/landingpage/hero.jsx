@@ -46,8 +46,8 @@ export function Hero() {
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/10"></div>
 
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-8 shadow-lg">
+        <div className="relative z-15 text-center px-9 max-w-4xl mx-auto">
+          <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-10 shadow-lg">
             <h1
               className="mb-6 text-6xl"
               style={{
@@ -64,8 +64,7 @@ export function Hero() {
                 textShadow: "0 1px 2px rgba(255,255,255,0.9)",
               }}
             >
-              A safe space for mental wellness. Take a moment to
-              breathe, reflect, and care for yourself.
+            Control your mind, for it can be your friend or your enemy.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -76,7 +75,7 @@ export function Hero() {
                 className="text-white shadow-lg"
                 style={{ backgroundColor: "#7B9ACC" }}
               >
-                Go to Dashboard
+                Start fresh
               </Button>
 
               {/* Other buttons */}

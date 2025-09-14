@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
+const Mood = require("../models/MoodModel"); // import mood model
 
 // 🔑 Generate JWT
 const generateToken = (id) => {
@@ -10,7 +11,7 @@ const generateToken = (id) => {
 // 📌 Register User
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, profileImageUrl } = req.body;
+    const { name, email, password, profilePic } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -27,14 +28,14 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      profileImageUrl,
+      profilePic,
     });
 
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      profileImageUrl: user.profileImageUrl,
+      profilePic: user.profilePic,
       token: generateToken(user._id),
     });
   } catch (error) {
@@ -58,7 +59,7 @@ const loginUser = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      profileImageUrl: user.profileImageUrl,
+      profilePic: user.profilePic,
       token: generateToken(user._id),
     });
   } catch (error) {
@@ -68,16 +69,18 @@ const loginUser = async (req, res) => {
 
 // 📌 Get User Profile (protected)
 const getUserProfile = async (req, res) => {
-  try {
-    res.json({
-      _id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      profileImageUrl: req.user.profileImageUrl,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to load profile" });
-  }
+  const user = await User.findById(req.user._id).select("-password");
+  if (!user) return res.status(404).json({ message: "User not found" });
+
+  // Get latest mood
+  const latestMood = await Mood.findOne({ user: req.user._id })
+    .sort({ createdAt: -1 })
+    .exec();
+
+  res.json({
+    ...user.toObject(),
+    currentMood: latestMood ? latestMood.mood : "",
+  });
 };
 
 module.exports = { registerUser, loginUser, getUserProfile };

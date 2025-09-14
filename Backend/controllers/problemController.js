@@ -3,12 +3,15 @@ const Problem = require("../models/problemModel");
 // ➕ Add new problem
 const addProblem = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { text, mood, anonymous, category } = req.body;
     if (!text) return res.status(400).json({ message: "Problem text required" });
 
     const problem = await Problem.create({
       user: req.user._id,
       text,
+      mood,
+      anonymous,
+      category,
     });
 
     res.status(201).json(problem);

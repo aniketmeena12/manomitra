@@ -42,23 +42,37 @@ export default function PositiveHabitTracker({ userId = "guest" }) {
     localStorage.setItem("habitData", JSON.stringify(allUsers));
   }, [userData, userId]);
 
-  const handleComplete = (habit) => {
-    if (!userData.completed.includes(habit.id)) {
-      const updatedCompleted = [...userData.completed, habit.id];
+  const handleComplete = async (habit) => {
+  if (!userData.completed.includes(habit.id)) {
+    const updatedCompleted = [...userData.completed, habit.id];
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:8000/api/habits/complete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ habitId: habit.id, reward: habit.reward }),
+      });
+
+      const data = await res.json();
+
       let newData = {
         ...userData,
         completed: updatedCompleted,
-        points: userData.points + habit.reward,
+        streak: data.streak,
+        points: data.wellnessPoints,
       };
 
-      // If all habits done → increase streak
-      if (updatedCompleted.length === habits.length) {
-        newData.streak = userData.streak + 1;
-      }
-
       setUserData(newData);
+    } catch (err) {
+      console.error("Error updating habit:", err);
     }
-  };
+  }
+};
+
 
   const progress = Math.round((userData.completed.length / habits.length) * 100);
 

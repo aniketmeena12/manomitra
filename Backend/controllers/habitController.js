@@ -1,16 +1,17 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const User = require("../models/userModel");
+const updateStreak = require("../utils/streakhelper");
 
 // Utility for date
 const getToday = () => new Date().toISOString().split("T")[0];
-const User = require("../models/userModel");
 
 // 📌 Register User
- const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { name, email, password } = req.body;
     const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, password: hashed, lastDate: getToday() });
+    const user = await User.create({ name, email, password: hashed, lastDate: getToday() });
     res.status(201).json({ message: "User registered", userId: user._id });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -18,10 +19,10 @@ const User = require("../models/userModel");
 };
 
 // 📌 Login User
- const loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const match = await bcrypt.compare(password, user.password);
@@ -34,8 +35,8 @@ const User = require("../models/userModel");
   }
 };
 
-// 📌 Get User Data (with daily reset check)
- const getUserData = async (req, res) => {
+// 📌 Get User Data
+const getUserData = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     const today = getToday();
@@ -47,32 +48,40 @@ const User = require("../models/userModel");
       await user.save();
     }
 
-    res.json(user);
+    res.json({
+      name: user.name,
+      email: user.email,
+      streak: user.streak,
+      wellnessPoints: user.wellnessPoints,
+      completed: user.completed,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 // 📌 Complete a Habit
- const completeHabit = async (req, res) => {
+const completeHabit = async (req, res) => {
   try {
     const { habitId, reward } = req.body;
     const user = await User.findById(req.user.id);
 
-    if (!user.completed.includes(habitId)) {
-      user.completed.push(habitId);
-      user.points += reward;
+    if (!user.completed.includes(habitId.toString())) {
+      user.completed.push(habitId.toString());
 
-      // If all habits done → increase streak
-      const TOTAL_HABITS = 9; // update if you add more habits
-      if (user.completed.length === TOTAL_HABITS) {
-        user.streak += 1;
-      }
+      // Update streak & wellness points using streakHelper
+      const result = await updateStreak(user._id, reward);
 
       await user.save();
-    }
 
-    res.json(user);
+      res.json({
+        streak: result.streak,
+        wellnessPoints: result.wellnessPoints,
+        completed: user.completed,
+      });
+    } else {
+      res.status(400).json({ message: "Habit already completed today" });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -1,31 +1,33 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
+    // Basic Info
     name: { type: String, required: true, trim: true },
-
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
       trim: true,
-      match: /^(?:[a-zA-Z0-9_'^&\/+\-]+(?:\.[a-zA-Z0-9_'^&\/+\-]+)*|"(?:[^"]|\\")+")@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
+      match:
+        /^(?:[a-zA-Z0-9_'^&\/+\-]+(?:\.[a-zA-Z0-9_'^&\/+\-]+)*|"(?:[^"]|\\")+")@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
     },
-
     password: { type: String, required: true, minlength: 6 },
 
+    // Optional Profile Fields
     bio: { type: String, default: "" },
     profilePic: { type: String, default: "" },
     height: { type: Number, default: null },
     weight: { type: Number, default: null },
     psychCategory: { type: String, default: "" },
 
-    // ✅ Habit Tracker Fields
-    streak: { type: Number, default: 0 }, // consecutive days completed
-    points: { type: Number, default: 0 }, // reward points earned
-    completed: { type: [Number], default: [] }, // store habit IDs completed today
-    lastDate: { type: String }, // YYYY-MM-DD of last habit completion reset
+    // ✅ Habit Tracker & Wellness
+    streak: { type: Number, default: 0 },
+    wellnessPoints: { type: Number, default: 0 },
+    completed: { type: [String], default: [] }, // store habit IDs as strings
+    lastDate: { type: String }, // YYYY-MM-DD
   },
   { timestamps: true }
 );
@@ -45,6 +47,14 @@ userSchema.pre("save", async function (next) {
 // 🔑 Compare password helper
 userSchema.methods.comparePassword = function (candidate) {
   return bcrypt.compare(candidate, this.password);
+};
+
+// 🔑 Optional helper: reset daily habits if new day
+userSchema.methods.resetDailyHabits = function (today) {
+  if (this.lastDate !== today) {
+    this.completed = [];
+    this.lastDate = today;
+  }
 };
 
 const User = mongoose.model("User", userSchema);

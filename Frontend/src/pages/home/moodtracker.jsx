@@ -1,7 +1,8 @@
 "use client";
 
 import { UserContext } from "@/context/usercontext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 // Mood options with emoji and color
 const moods = [
@@ -33,7 +34,7 @@ const habits = [
 const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 const MoodTracker = () => {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [selectedMood, setSelectedMood] = useState(null);
   const [journal, setJournal] = useState({});
   const [entry, setEntry] = useState("");
@@ -52,14 +53,25 @@ const MoodTracker = () => {
   const today = getToday();
 
   // Mood select handler
-  const handleMoodSelect = (mood) => {
+  const handleMoodSelect = async (mood) => {
     setSelectedMood(mood);
-    // Save mood for the selected day in displayed month
     const dateKey = `${displayYear}-${displayMonth + 1}-${now.getDate()}`;
     setCalendar((prev) => ({
       ...prev,
       [dateKey]: mood,
     }));
+
+    // Save to backend
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "http://localhost:8000/api/moods",
+        { date: dateKey, mood },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      // handle error
+    }
   };
 
   // Journal entry handler
@@ -138,6 +150,26 @@ const MoodTracker = () => {
     setDisplayMonth(newMonth);
     setDisplayYear(newYear);
   };
+
+  useEffect(() => {
+    const fetchMoods = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:8000/api/moods", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // Convert array to { "YYYY-MM-DD": moodName }
+        const moodsObj = {};
+        res.data.forEach((m) => {
+          moodsObj[m.date] = m.mood;
+        });
+        setCalendar(moodsObj);
+      } catch (err) {
+        // handle error
+      }
+    };
+    fetchMoods();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[rgba(255,245,204,0.7)] flex justify-center py-8 px-2 rounded-3xl">
@@ -246,12 +278,19 @@ const MoodTracker = () => {
             <div className="flex justify-between items-center px-2 py-4">
               {(() => {
                 // Find the reference date: today if in displayed month, else 1st of displayed month
-                const referenceDate = new Date(displayYear, displayMonth, now.getDate());
+                const referenceDate = new Date(
+                  displayYear,
+                  displayMonth,
+                  now.getDate()
+                );
                 if (referenceDate.getMonth() !== displayMonth) {
                   referenceDate.setDate(1);
                 }
                 // Find the Monday of the week (for Monday-start week)
-                const dayOfWeek = referenceDate.getDay() === 0 ? 6 : referenceDate.getDay() - 1; // 0=Sunday, 1=Monday...
+                const dayOfWeek =
+                  referenceDate.getDay() === 0
+                    ? 6
+                    : referenceDate.getDay() - 1; // 0=Sunday, 1=Monday...
                 const weekStart = new Date(referenceDate);
                 weekStart.setDate(referenceDate.getDate() - dayOfWeek);
 

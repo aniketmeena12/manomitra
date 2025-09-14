@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Input from "@/components/inputs/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -24,15 +30,21 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(profile);
 
+  // Fetch profile & habit data
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:8000/api/user/profile", {
+        const resProfile = await axios.get("http://localhost:8000/api/user/profile", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const resHabits = await axios.get("http://localhost:8000/api/habits/userdata", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setProfile(res.data);
-        setFormData(res.data);
+
+        setProfile({ ...resProfile.data, ...resHabits.data });
+        setFormData({ ...resProfile.data, ...resHabits.data });
       } catch (err) {
         toast.error("Failed to fetch profile");
       }
@@ -61,20 +73,25 @@ export default function ProfilePage() {
     }
   };
 
-  // Generate fallback avatar using DiceBear if no profilePic exists
   const avatarUrl =
     profile.profilePic ||
-    `https://avatars.dicebear.com/api/initials/${encodeURIComponent(profile.name || "U")}.svg`;
+    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+      profile.name || "U"
+    )}`;
 
   return (
-    <div className="p-6 bg-cover bg-center min-h-screen" style={{ backgroundImage: "url('/bg-trees.jpg')" }}>
+    <div
+      className="p-6 bg-cover bg-center min-h-screen"
+      style={{ backgroundImage: "url('/bg-trees.jpg')" }}
+    >
       <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6 space-y-6">
-
         {/* Profile Header */}
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <Avatar className="w-24 h-24 border-4 border-purple-400 shadow-md">
             <AvatarImage src={avatarUrl} alt={profile.name} />
-            <AvatarFallback>{profile.name ? profile.name[0].toUpperCase() : "U"}</AvatarFallback>
+            <AvatarFallback>
+              {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
+            </AvatarFallback>
           </Avatar>
 
           <div className="flex-1">
@@ -84,8 +101,12 @@ export default function ProfilePage() {
             <p className="text-gray-500 text-sm">
               Height: {profile.height} cm | Weight: {profile.weight} kg
             </p>
-            <p className="text-gray-500 text-sm">Category: {profile.psychCategory}</p>
-            <Button className="mt-2" onClick={() => setIsEditing(true)}>Edit Profile</Button>
+            <p className="text-gray-500 text-sm">
+              Category: {profile.psychCategory}
+            </p>
+            <Button className="mt-2" onClick={() => setIsEditing(true)}>
+              Edit Profile
+            </Button>
           </div>
         </div>
 
@@ -109,20 +130,57 @@ export default function ProfilePage() {
         <Dialog open={isEditing} onOpenChange={setIsEditing}>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle className="text-purple-700">Edit Profile</DialogTitle>
+              <DialogTitle className="text-purple-700">
+                Edit Profile
+              </DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4">
-              <Input name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
-              <Input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="Email" />
-              <Textarea name="bio" value={formData.bio} onChange={handleChange} placeholder="Bio" />
-              <Input name="height" type="number" value={formData.height} onChange={handleChange} placeholder="Height (cm)" />
-              <Input name="weight" type="number" value={formData.weight} onChange={handleChange} placeholder="Weight (kg)" />
-              <Input name="psychCategory" value={formData.psychCategory} onChange={handleChange} placeholder="Psychology Category" />
+              <Input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+              />
+              <Input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+              />
+              <Textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                placeholder="Bio"
+              />
+              <Input
+                name="height"
+                type="number"
+                value={formData.height}
+                onChange={handleChange}
+                placeholder="Height (cm)"
+              />
+              <Input
+                name="weight"
+                type="number"
+                value={formData.weight}
+                onChange={handleChange}
+                placeholder="Weight (kg)"
+              />
+              <Input
+                name="psychCategory"
+                value={formData.psychCategory}
+                onChange={handleChange}
+                placeholder="Psychology Category"
+              />
             </div>
 
             <DialogFooter className="flex justify-end gap-3 mt-4">
-              <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setIsEditing(false)}>
+                Cancel
+              </Button>
               <Button onClick={handleSave}>Save</Button>
             </DialogFooter>
           </DialogContent>

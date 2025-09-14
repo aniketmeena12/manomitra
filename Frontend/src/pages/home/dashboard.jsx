@@ -84,15 +84,15 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Daily Wellness Quest */}
           <div className="bg-[rgb(228,217,255,0.3)] shadow-md rounded-2xl p-4">
-            <h3 className="font-bold text-lg mb-2">Daily Wellness Quest</h3>
+            <h3 className="font-bold text-lg mb-2">🌱 Positive Habit Tracker</h3>
             <p className="text-gray-600 mb-4">
-              Complete a 2-min breathing exercise to earn points.
+                Replace bad habits with good ones & grow every day 💪
             </p>
             <NavLink
               to="/breathing"
               className="inline-block bg-[#341688] text-sm font-semibold text-white px-7 py-2.5 rounded-full hover:bg-[#9470f6] hover:text-black border transition-colors cursor-pointer"
             >
-              Start Exercise
+              Start Tracking
             </NavLink>
           </div>
 

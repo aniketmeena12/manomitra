@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, Settings, LogOut, User } from "lucide-react";
+import { Bell, Settings, LogOut, User, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function DashboardHeader() {
@@ -38,11 +38,7 @@ export function DashboardHeader() {
       <div className="flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3  transition">
         <div className="flex items-center gap-3">
-          <img
-            src="/logo.png" // replace with your logo path
-            alt="Logo"
-            className="w-10 h-10 object-contain"
-          />
+          <Heart className="w-8 h-8" style={{ color: '#7B9ACC' }} />
           <h1 className="text-xl font-semibold text-[#4A4A4A]">
             ManoMitra
           </h1>

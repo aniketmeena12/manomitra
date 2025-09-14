@@ -13,6 +13,9 @@ const problemSchema = new mongoose.Schema(
       support: { type: Number, default: 0 },
       sad: { type: Number, default: 0 },
     },
+    mood: { type: String, default: "" },
+    category: { type: String, default: "" },
+    anonymous: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
