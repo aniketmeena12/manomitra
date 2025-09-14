@@ -24,10 +24,11 @@ const userSchema = new mongoose.Schema(
     psychCategory: { type: String, default: "" },
 
     // ✅ Habit Tracker & Wellness
-    streak: { type: Number, default: 0 },
     wellnessPoints: { type: Number, default: 0 },
-    completed: { type: [String], default: [] }, // store habit IDs as strings
-    lastDate: { type: String }, // YYYY-MM-DD
+    streak: { type: Number, default: 0 },
+    lastHabitDate: { type: String, default: "" }, // YYYY-MM-DD
+    completedHabits: { type: Map, of: [String], default: {} }, 
+    // Example: { "2025-09-12": ["1", "3"] } → per-day completed habits
   },
   { timestamps: true }
 );
@@ -49,11 +50,11 @@ userSchema.methods.comparePassword = function (candidate) {
   return bcrypt.compare(candidate, this.password);
 };
 
-// 🔑 Optional helper: reset daily habits if new day
+// 🔑 Reset habits if new day
 userSchema.methods.resetDailyHabits = function (today) {
-  if (this.lastDate !== today) {
-    this.completed = [];
-    this.lastDate = today;
+  if (this.lastHabitDate !== today) {
+    this.completedHabits.set(today, []); // reset today's habits
+    this.lastHabitDate = today;
   }
 };
 

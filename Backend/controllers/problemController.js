@@ -1,6 +1,6 @@
 const Problem = require("../models/problemModel");
 
-// ➕ Add new problem
+// ➕ Add new problem/thread
 const addProblem = async (req, res) => {
   try {
     const { text, mood, anonymous, category } = req.body;
@@ -20,26 +20,33 @@ const addProblem = async (req, res) => {
   }
 };
 
-// 📋 Get all problems
+// 📋 Get all problems/threads
 const getProblems = async (req, res) => {
   try {
-    const problems = await Problem.find().populate("user", "name email");
+    const problems = await Problem.find()
+      .populate("user", "name email")
+      .sort({ createdAt: -1 }); // newest first
     res.json(problems);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// 👍 React to a problem
+// 👍 React to a problem/thread
 const reactProblem = async (req, res) => {
   try {
-    const { problemId, type } = req.body;
-    const validTypes = ["like", "support", "sad"];
-    if (!validTypes.includes(type))
-      return res.status(400).json({ message: "Invalid reaction type" });
+    const { threadId } = req.params;
+    const { type } = req.body;
 
-    const problem = await Problem.findById(problemId);
-    if (!problem) return res.status(404).json({ message: "Problem not found" });
+    const validTypes = ["like", "support", "sad"];
+    if (!validTypes.includes(type)) {
+      return res.status(400).json({ message: "Invalid reaction type" });
+    }
+
+    const problem = await Problem.findById(threadId);
+    if (!problem) {
+      return res.status(404).json({ message: "Problem not found" });
+    }
 
     problem.reactions[type] += 1;
     await problem.save();

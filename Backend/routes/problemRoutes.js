@@ -1,16 +1,16 @@
 const express = require("express");
 const { addProblem, getProblems, reactProblem } = require("../controllers/problemController");
-const { protect } = require("../middleware/authmiddleware.js");
+const { protect } = require("../middleware/authmiddleware");
 
 const router = express.Router();
 
-// ➕ Post new problem
-router.post("/", protect, addProblem);
+// ➕ Create new thread
+router.post("/threads", protect, addProblem);
 
-// 📋 Get all problems
-router.get("/", protect, getProblems);
+// 📋 Get all threads
+router.get("/threads", protect, getProblems);
 
-// 👍 React to problem
-router.post("/react", protect, reactProblem);
+// 👍 React to thread
+router.post("/threads/:threadId/reactions", protect, reactProblem);
 
 module.exports = router;

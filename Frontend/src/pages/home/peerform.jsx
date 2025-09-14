@@ -31,13 +31,18 @@ export default function PeerForum() {
       const res = await axios.post(
         "http://localhost:8000/api/forum/threads",
         {
-          title: newPost,
+          text: newPost, // ✅ match backend
           mood,
           anonymous,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setThreads([res.data, ...threads]);
+
+      // backend doesn’t include comments or reactions yet → add defaults
+      setThreads([
+        { ...res.data, comments: [], reactions: { like: 0, love: 0, hug: 0 } },
+        ...threads,
+      ]);
       setNewPost("");
     } catch (err) {
       console.error("Failed to create thread:", err);
@@ -54,9 +59,7 @@ export default function PeerForum() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setThreads(
-        threads.map((t) => (t._id === threadId ? res.data : t))
-      );
+      setThreads(threads.map((t) => (t._id === threadId ? res.data : t)));
     } catch (err) {
       console.error("Failed to add comment:", err);
     }
@@ -70,9 +73,7 @@ export default function PeerForum() {
         { type },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setThreads(
-        threads.map((t) => (t._id === threadId ? res.data : t))
-      );
+      setThreads(threads.map((t) => (t._id === threadId ? res.data : t)));
     } catch (err) {
       console.error("Failed to react:", err);
     }
@@ -127,10 +128,11 @@ export default function PeerForum() {
           <div key={thread._id} className="bg-white p-4 rounded-2xl shadow mb-4">
             <div className="flex items-center space-x-2 mb-2">
               <span className="text-xl">{thread.mood}</span>
-              <h3 className="font-semibold text-lg">{thread.title}</h3>
+              <h3 className="font-semibold text-lg">{thread.text}</h3>
             </div>
             <p className="text-sm text-gray-500 mb-2">
-              Category: {thread.category} | By {thread.author}
+              Category: {thread.category || "general"} | By{" "}
+              {thread.anonymous ? "Anonymous" : thread.user?.name || "User"}
             </p>
 
             {/* Reactions */}
@@ -139,28 +141,29 @@ export default function PeerForum() {
                 onClick={() => addReaction(thread._id, "like")}
                 className="px-2 py-1 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                👍 {thread.reactions.like}
+                👍 {thread.reactions?.like || 0}
               </button>
               <button
                 onClick={() => addReaction(thread._id, "love")}
                 className="px-2 py-1 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                ❤ {thread.reactions.love}
+                ❤ {thread.reactions?.love || 0}
               </button>
               <button
                 onClick={() => addReaction(thread._id, "hug")}
                 className="px-2 py-1 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                🤗 {thread.reactions.hug}
+                🤗 {thread.reactions?.hug || 0}
               </button>
             </div>
 
             {/* Comments */}
             <div className="mt-2">
               <h4 className="font-semibold text-sm mb-1">Comments:</h4>
-              {thread.comments.map((c) => (
-                <p key={c._id || c.id} className="text-sm text-gray-700 ml-2">
-                  <span className="font-medium">{c.author}:</span> {c.text}
+              {thread.comments?.map((c, i) => (
+                <p key={c._id || i} className="text-sm text-gray-700 ml-2">
+                  <span className="font-medium">{c.author || "User"}:</span>{" "}
+                  {c.text}
                 </p>
               ))}
               <CommentBox threadId={thread._id} addComment={addComment} />
@@ -193,8 +196,10 @@ function CommentBox({ threadId, addComment }) {
   const [comment, setComment] = React.useState("");
 
   const handleSubmit = () => {
-    addComment(threadId, comment);
-    setComment("");
+    if (comment.trim()) {
+      addComment(threadId, comment);
+      setComment("");
+    }
   };
 
   return (

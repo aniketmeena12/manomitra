@@ -37,9 +37,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/moods", moodRoutes);
 app.use("/api/habits", habitRoutes);
-app.use("/api/peerform", peerformRoutes); // <-- New Peerform API
+app.use("/api/forum", peerformRoutes); // <-- New Peerform API
 app.use("/api/user", userRoutes);
-app.use("/api/habits", habitRoutes);
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {
