@@ -38,7 +38,7 @@ export function PositiveAffirmations() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-50 to-pink-50">
+    <section className="py-20 bg-gradient-to-br from-purple-50 to-pink-50 " id='affirmations'>
       <div className="max-w-4xl mx-auto px-6 text-center">
         <h2 className="mb-8 text-4xl text-purple-700">
           Daily Affirmations

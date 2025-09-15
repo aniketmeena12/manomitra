@@ -1,8 +1,12 @@
-
 import { ImageWithFallback } from '@/components/inputs/imagefallback';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Palette, Users, PenTool } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Login from "@/pages/auth/login"; // Adjust path if needed
+import SignUp from "@/pages/auth/signup"; // Adjust path if needed
+import Modal from "@/components/Modal";
 
 const activities = [
   {
@@ -29,13 +33,26 @@ const activities = [
 ];
 
 export function CalmingActivities() {
+  const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState(false);
+  const [currentPage, setCurrentPage] = useState("login");
+
   const handleActivityClick = (activity) => {
-    // In a real app, these would navigate to specific activity pages
-    alert(`Starting ${activity}... (This would open the activity in a real app)`);
+    const isLoggedIn = !!localStorage.getItem("token");
+    if (!isLoggedIn) {
+      setShowLogin(true);
+      return;
+
+    }
+    if (activity === "Mindful Coloring" || activity === "Guided Journaling") {
+      navigate("/gamehub");
+    } else if (activity === "Community") {
+      navigate("/community");
+    }
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-teal-50 to-cyan-50">
+    <section className="py-20 bg-gradient-to-br from-teal-50 to-cyan-50 " id='activities'>
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="mb-8 text-4xl text-teal-700">
@@ -93,6 +110,23 @@ export function CalmingActivities() {
             </div>
           </Card>
         </div>
+        
+        {showLogin && (
+          <Modal
+            isOpen={showLogin}
+            onClose={() => {
+              setShowLogin(false);
+              setCurrentPage("login");
+            }}
+            hideHeader
+         
+          >
+            <div>
+              {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
+              {currentPage === "signup" && <SignUp setCurrentPage={setCurrentPage} />}
+            </div>
+          </Modal>
+        )}
       </div>
     </section>
   );

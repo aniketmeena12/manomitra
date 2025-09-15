@@ -81,9 +81,9 @@ const Dashboard = () => {
 
       {/* Grid Layout */}
       <div className="bg-[rgb(255,255,255,0.6)] rounded-xl p-5 shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  rounded-2xl gap-6">
           {/* Daily Wellness Quest */}
-          <div className="bg-[rgb(228,217,255,0.3)] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(228,217,255,0.3)] shadow-md hover:shadow-2xl rounded-2xl p-4">
             <h3 className="font-bold text-lg mb-2">🌱 Positive Habit Tracker</h3>
             <p className="text-gray-600 mb-4">
                 Replace bad habits with good ones & grow every day 💪
@@ -97,7 +97,7 @@ const Dashboard = () => {
           </div>
 
           {/* Mood Tracker Overview */}
-          <div className="bg-[rgb(244,244,175,0.5)] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(244,244,175,0.5)] shadow-md hover:shadow-2xl rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Smile size={18} />
               <h3 className="font-bold text-lg">Mood Tracker</h3>
@@ -152,7 +152,7 @@ const Dashboard = () => {
           </div>
 
           {/* Self Assessment */}
-          <div className="bg-[rgb(224,215,215,0.5)] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(224,215,215,0.5)] hover:shadow-2xl shadow-md rounded-2xl p-4">
             <h3 className="font-bold text-lg mb-2">Self Assessment</h3>
             <p className="text-gray-600 mb-4">
               Check your mental wellness with a quick test.
@@ -166,7 +166,7 @@ const Dashboard = () => {
           </div>
 
           {/* Next Appointment */}
-          <div className="bg-[rgb(231,182,204,0.4)] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(231,182,204,0.4)] hover:shadow-2xl shadow-md rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Calendar size={18} />
               <h3 className="font-bold text-lg">Next Appointment</h3>
@@ -179,7 +179,7 @@ const Dashboard = () => {
           </div>
 
           {/* Community Hub */}
-          <div className="bg-[rgb(159,228,212,0.3)] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(159,228,212,0.3)] hover:shadow-2xl shadow-md rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Users size={18} />
               <h3 className="font-bold text-lg">Community Hub</h3>
@@ -198,7 +198,7 @@ const Dashboard = () => {
           </div>
 
           {/* Resources */}
-          <div className="bg-[rgb(207,165,226,0.4)] shadow-md rounded-2xl p-4">
+          <div className="bg-[rgb(207,165,226,0.4)] hover:shadow-2xl shadow-md rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <BookOpen size={18} />
               <h3 className="font-bold text-lg">Resources</h3>
