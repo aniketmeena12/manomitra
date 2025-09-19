@@ -1,20 +1,10 @@
 const express = require("express");
-const {
-  registerUser,
-  loginUser,
-  getUserProfile,
-  updateUserProfile, // ✅ new controller method
-} = require("../controllers/authcontroller"); // ⚠️ make sure the filename matches
-const { protect } = require("../middleware/authmiddleware");
+const { registerUser, loginUser } = require("../controllers/authController");
 
 const router = express.Router();
 
-// Auth routes
+// Auth only
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-
-// Profile routes
-router.get("/profile", protect, getUserProfile);
-router.put("/profile", protect, updateUserProfile); // ✅ now points to controller
 
 module.exports = router;

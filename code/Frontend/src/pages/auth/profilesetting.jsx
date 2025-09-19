@@ -8,6 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Input from "@/components/inputs/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,7 +19,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
 
-  // Fetch profile data
+  // Fetch profile
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -26,9 +27,8 @@ export default function ProfilePage() {
         const res = await axios.get("http://localhost:8000/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setProfile(res.data);
-        setFormData(res.data); // sync formData with latest profile
+        setFormData(res.data);
       } catch (err) {
         console.error("Profile fetch error:", err.response?.data || err.message);
         toast.error("Failed to fetch profile");
@@ -37,27 +37,37 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-  // Handle input changes
+  // Handle inputs (keep as string)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Save updated profile
+  // Save profile
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
+
+      const dataToSend = {
+        ...formData,
+        height: formData.height ? Number(formData.height) : null,
+        weight: formData.weight ? Number(formData.weight) : null,
+      };
+
+      console.log("Sending to backend:", dataToSend);
+
       const res = await axios.put(
         "http://localhost:8000/api/user/profile",
-        formData,
+        dataToSend,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       setProfile(res.data);
       setIsEditing(false);
       toast.success("Profile updated successfully!");
     } catch (err) {
       console.error("Profile update error:", err.response?.data || err.message);
-      toast.error("Failed to update profile");
+      toast.error(err.response?.data?.message || "Failed to update profile");
     }
   };
 
@@ -127,6 +137,9 @@ export default function ProfilePage() {
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-purple-700">Edit Profile</DialogTitle>
+              <DialogDescription>
+                Update your profile details and save changes.
+              </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4">

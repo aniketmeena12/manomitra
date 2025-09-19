@@ -12,7 +12,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");     // ✅ user login/register
 const moodRoutes = require("./routes/moodroutes");   // ✅ mood tracking // ✅ habit tracker
 const peerformRoutes = require("./routes/problemRoutes")  // ✅ peer problem sharing
-const userRoutes = require("./routes/authRoutes"); // or authRoutes if you put it there
+const userRoutes = require("./routes/userRoutes"); // <-- use the correct file
 const habitRoutes = require("./routes/habitRoutes");
 
 const app = express();
@@ -38,7 +38,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/moods", moodRoutes);
 app.use("/api/habits", habitRoutes);
 app.use("/api/forum", peerformRoutes); // <-- New Peerform API
-app.use("/api/user", userRoutes);
+app.use("/api/user", userRoutes); // mount only this for user endpoints
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {

@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
@@ -11,7 +10,7 @@ const protect = async (req, res, next) => {
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      token = req.headers.authorization.split(" ")[1];
+      token = req.headers.authorization.split(" ")[1].trim();
 
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -29,6 +28,11 @@ const protect = async (req, res, next) => {
     return res.status(401).json({ message: "Not authorized, no token provided" });
   } catch (error) {
     console.error("Auth Middleware Error:", error.message);
+
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({ message: "Token expired, please login again" });
+    }
+
     return res.status(401).json({ message: "Not authorized, token invalid" });
   }
 };

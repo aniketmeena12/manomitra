@@ -10,7 +10,6 @@ import Peerform from "./pages/home/peerform";
 import Appointmentbook from "./pages/home/counsellingbook";
 import MoodTrackerPage from "./pages/home/moodtracker";
 import { Toaster } from "sonner";
-import DailyWellnessQuest from "./pages/useritems/dailyWllnQst";
 import PositiveHabitTracker from "./pages/useritems/dailyWllnQst";
 import SmallGameHub from "./pages/smallgame/smallgamehub";
 import Assestmenthub from "./pages/home/Assestmenthub";
