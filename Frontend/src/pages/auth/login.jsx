@@ -12,7 +12,7 @@ const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); // ✅ new loading state
+  const [loading, setLoading] = useState(false);
 
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -30,6 +30,7 @@ const Login = ({ setCurrentPage }) => {
     }
 
     setError("");
+    setLoading(true);
 
     try {
       const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
@@ -37,30 +38,31 @@ const Login = ({ setCurrentPage }) => {
         password,
       });
 
-      // ✅ use _id from backend
-      const { token, name, email: userEmail, profileImageUrl, _id } =
-        response.data;
+      // Destructure response safely
+      const { token, name, email: userEmail, profilePic, _id } = response.data;
 
       if (token) {
         updateUser({
           token,
           name,
           email: userEmail,
-          profileImageUrl,
-          id: _id, // ✅ mapped correctly
+          profileImageUrl: profilePic,
+          id: _id,
         });
 
-        navigate("/dashboard"); // redirect
+        navigate("/dashboard");
       } else {
         setError("Login failed. Please try again.");
       }
     } catch (error) {
-      if (error.response&& error.response.data.message) {
+      if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
-      }else{
-        setError("Something went wrong. Please try agian")
+      } else {
+        setError("Something went wrong. Please try again.");
       }
-    } 
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,7 +93,7 @@ const Login = ({ setCurrentPage }) => {
 
         <Button
           type="submit"
-           className="w-full text-white bg-[#7B9ACC] hover:bg-[#b7cef4] cursor-pointer"
+          className="w-full text-white bg-[#7B9ACC] hover:bg-[#b7cef4] cursor-pointer"
           disabled={loading}
         >
           {loading ? "Logging in..." : "LOGIN"}
