@@ -1,4 +1,4 @@
-import { ImageWithFallback } from '@/components/Inputs/ImageFallback';
+import { ImageWithFallback } from '@/components/inputs/ImageFallback';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Palette, Users, PenTool } from 'lucide-react';
