@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 
 import { CheckCircle, Circle, Star, Gift, Trophy } from 'lucide-react';
 import { Toaster, toast } from "sonner"
-import { Card } from '@/components/ui/card';
+import { Card } from '../../components/ui/card';
 import { Progress } from '@radix-ui/react-progress';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../components/ui/button';
 
 
 const quests = [

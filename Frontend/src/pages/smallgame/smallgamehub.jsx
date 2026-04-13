@@ -2,16 +2,16 @@ import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SnakeGame from "./snake"; // adjust path if needed
 import Journoul from "./journoul";
-import snakeThumb from "@/assets/snake.png";
-import journel from "@/assets/Journel.png"
+import snakeThumb from "../../assets/snake.png";
+import journel from "../../assets/Journel.png"
 import CanvasBoard from "./mindfullcolors";
-import canvas from "@/assets/Canvas.png"
+import canvas from "../../assets/Canvas.png"
 import FallingTypingGame from "./focus";
-import typinggame from "@/assets/typinggame.png"
+import typinggame from "../../assets/typinggame.png"
 import MemoryMatchingGame from "./memorygame";
-import memory from "@/assets/Memory.png"
+import memory from "../../assets/Memory.png"
 import MeditationSounds from "./Meditation";
-import meditation from "@/assets/meditation.png";
+import meditation from "../../assets/meditation.png";
 
 const SAMPLE_GAMES = [
 	{

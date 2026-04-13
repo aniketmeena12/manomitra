@@ -1,9 +1,9 @@
-import Modal from '@/components/Modal';
-import { Button } from '@/components/ui/button';
-import { UserContext } from '@/context/usercontext';
-import Login from '@/pages/auth/login';
-import SignUp from '@/pages/auth/signup';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Modal from '../components/Modal';
+import { Button } from '../components/ui/button';
+import { UserContext } from '../context/usercontext';
+import Login from '../pages/auth/login';
+import SignUp from '../pages/auth/signup';
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Heart, Menu, User, Settings, LogOut } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../components/ui/dropdown-menu";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

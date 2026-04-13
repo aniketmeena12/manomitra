@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { Calendar, Users, BookOpen, Smile } from "lucide-react";
 import axios from "axios";
-import { UserContext } from "@/context/usercontext";
+import { UserContext } from "../../context/usercontext";
 import { NavLink } from "react-router-dom";
 
 const Dashboard = () => {

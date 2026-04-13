@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "@/components/inputs/Input";
+import Input from "../../components/inputs/Input";
 import { UserContext } from "../../context/usercontext";
 import { API_PATHS } from "../../utilis/apipaths";
 import axiosInstance from "../../utilis/axiosinstance";
 import uploadImage from "../../utilis/uploadimage";
 import { validateEmail } from "../../utilis/helper";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 
 const SignUp = ({ setCurrentPage }) => {
   const [profilePic, setProfilePic] = useState(null);

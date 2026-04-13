@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import { RefreshCw, Heart } from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { ImageWithFallback } from '@/components/inputs/ImageFallback';
-import { Button } from '@/components/ui/button';
+import { Card } from '../../components/ui/card';
+import { ImageWithFallback } from '../../components/inputs/ImageFallback';
+import { Button } from '../../components/ui/button';
 
 
 const affirmations = [

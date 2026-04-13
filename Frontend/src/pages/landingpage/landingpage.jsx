@@ -7,7 +7,7 @@ import { EmergencyResources } from "./Emergency";
 import { CalmingActivities } from "./calmingactivities";
 import { PositiveAffirmations } from "./possitiveaffertion";
 import { Hero } from "./hero";
-import { Header } from "@/layouts/header";
+import { Header } from "../../layouts/header";
 
 import { AssessmentHub } from "./assestmenthub";
 

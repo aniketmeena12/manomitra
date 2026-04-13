@@ -1,12 +1,12 @@
-import { ImageWithFallback } from '@/components/inputs/ImageFallback';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { ImageWithFallback } from '../../components/inputs/ImageFallback';
+import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
 import { Palette, Users, PenTool } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Login from "@/pages/auth/login"; // Adjust path if needed
-import SignUp from "@/pages/auth/signup"; // Adjust path if needed
-import Modal from "@/components/Modal";
+import Login from "../auth/login"; // Adjust path if needed
+import SignUp from "../auth/signup"; // Adjust path if needed
+import Modal from "../../components/Modal";
 
 const activities = [
   {

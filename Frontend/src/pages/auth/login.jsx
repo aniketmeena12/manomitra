@@ -6,7 +6,7 @@ import axiosInstance from "../../utilis/axiosinstance";
 import { API_PATHS } from "../../utilis/apipaths";
 import { UserContext } from "../../context/usercontext";
 import { validateEmail } from "../../utilis/helper";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 
 const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");

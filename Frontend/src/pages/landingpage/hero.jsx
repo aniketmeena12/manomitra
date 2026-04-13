@@ -1,11 +1,11 @@
-import { ImageWithFallback } from "@/components/inputs/ImageFallback";
-import { Button } from "@/components/ui/button";
+import { ImageWithFallback } from "../../components/inputs/ImageFallback";
+import { Button } from "../../components/ui/button";
 import { useContext, useState } from "react";
-import { UserContext } from "@/context/usercontext";
+import { UserContext } from "../../context/usercontext";
 import { useNavigate } from "react-router-dom";
-import Modal from "@/components/Modal";
-import Login from "@/pages/auth/login";
-import SignUp from "@/pages/auth/signup";
+import Modal from "../../components/Modal";
+import Login from "../auth/login";
+import SignUp from "../auth/signup";
 
 export function Hero() {
   const { user } = useContext(UserContext);
