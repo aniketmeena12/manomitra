@@ -1,7 +1,7 @@
 // src/pages/Auth/Login.js
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "@/components/inputs/Input";
+import Input from "../../components/inputs/Input";
 import axiosInstance from "../../utilis/axiosinstance";
 import { API_PATHS } from "../../utilis/apipaths";
 import { UserContext } from "../../context/usercontext";
