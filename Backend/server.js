@@ -21,7 +21,7 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: "*", // ⚠️ change to frontend URL in production
+    origin: "https://manomitra-oxdi.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
