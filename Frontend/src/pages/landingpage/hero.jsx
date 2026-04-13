@@ -1,4 +1,4 @@
-import { ImageWithFallback } from "@/components/inputs/imagefallback";
+import { ImageWithFallback } from "@/components/Inputs/ImageFallback";
 import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
 import { UserContext } from "@/context/usercontext";

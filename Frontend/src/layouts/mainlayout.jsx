@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./slider";
-import { ImageWithFallback } from "@/components/inputs/imagefallback";
+import { ImageWithFallback } from "@/components/Inputs/ImageFallback";
 import { DashboardHeader } from "./navbar";
 
 const MainLayout = () => {
