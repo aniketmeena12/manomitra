@@ -22,8 +22,9 @@ app.use(helmet());
 app.use(
   cors({
     origin: "https://manomitra-oxdi.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
